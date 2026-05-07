@@ -1,0 +1,238 @@
+[
+  {
+    "_id": "69cff939516988e5a3bc6b48",
+    "user": "69cfceee516988e5a3bc6b08",
+    "orderItems": [
+      {
+        "product": "69cfa0a89f29ee17e3865db6",
+        "name": "Cải Chíp Hữu Cơ Thủy Canh",
+        "qty": 1,
+        "price": 35000,
+        "image": "https://images.unsplash.com/photo-1557844352-761f2565b576?w=500&q=80",
+        "_id": "69cff939516988e5a3bc6b49"
+      },
+      {
+        "product": "69cfa0a89f29ee17e3865dba",
+        "name": "Bông Cải Xanh Baby",
+        "qty": 1,
+        "price": 38000,
+        "image": "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=500&q=80",
+        "_id": "69cff939516988e5a3bc6b4a"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "ádasd",
+      "phone": "ádasda",
+      "address": "ádasda"
+    },
+    "paymentMethod": "Thanh toán khi nhận hàng",
+    "itemsPrice": 73000,
+    "shippingPrice": 30000,
+    "totalPrice": 103000,
+    "orderType": "Online",
+    "isPaid": false,
+    "status": "Đang giao",
+    "createdAt": "2026-04-03T17:30:33.250Z",
+    "updatedAt": "2026-04-03T22:41:50.012Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d030b5516988e5a3bc6c49",
+    "user": "69cfceee516988e5a3bc6b08",
+    "orderItems": [
+      {
+        "product": "69d011be3acd08884df98b16",
+        "name": "Nấm Kim Châm Hàn Quốc",
+        "qty": 1,
+        "price": 15000,
+        "image": "https://plus.unsplash.com/premium_photo-1674575495214-4bac16cd25a3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "_id": "69d030b5516988e5a3bc6c4a"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "a",
+      "phone": "aaa",
+      "address": "xxxx"
+    },
+    "paymentMethod": "Chuyển khoản QR",
+    "itemsPrice": 15000,
+    "shippingPrice": 30000,
+    "totalPrice": 45000,
+    "orderType": "Online",
+    "isPaid": false,
+    "status": "Đang giao",
+    "createdAt": "2026-04-03T21:27:17.612Z",
+    "updatedAt": "2026-04-03T22:41:29.159Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d0427a516988e5a3bc6ec9",
+    "user": "69cfceee516988e5a3bc6b08",
+    "orderItems": [
+      {
+        "product": "69cfa0a89f29ee17e3865dba",
+        "name": "Bông Cải Xanh Baby",
+        "qty": 2,
+        "price": 38000,
+        "image": "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=500&q=80",
+        "_id": "69d0427a516988e5a3bc6eca"
+      },
+      {
+        "product": "69d011be3acd08884df98b14",
+        "name": "Đậu Bắp Non Hữu Cơ",
+        "qty": 2,
+        "price": 18000,
+        "image": "https://images.unsplash.com/photo-1425543103986-22abb7d7e8d2?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "_id": "69d0427a516988e5a3bc6ecb"
+      },
+      {
+        "product": "69d011be3acd08884df98b12",
+        "name": "Bí Đỏ Hồ Lô Hữu Cơ",
+        "qty": 2,
+        "price": 22000,
+        "image": "https://images.unsplash.com/photo-1506807803488-8eafc15316c7?w=500&q=80",
+        "_id": "69d0427a516988e5a3bc6ecc"
+      },
+      {
+        "product": "69d011be3acd08884df98b16",
+        "name": "Nấm Kim Châm Hàn Quốc",
+        "qty": 2,
+        "price": 15000,
+        "image": "https://plus.unsplash.com/premium_photo-1674575495214-4bac16cd25a3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "_id": "69d0427a516988e5a3bc6ecd"
+      },
+      {
+        "product": "69d011be3acd08884df98b0d",
+        "name": "Xà Lách Mỡ Đà Lạt",
+        "qty": 1,
+        "price": 25000,
+        "image": "https://images.unsplash.com/photo-1556781366-336f8353ba7c?w=500&q=80",
+        "_id": "69d0427a516988e5a3bc6ece"
+      },
+      {
+        "product": "69d011be3acd08884df98b10",
+        "name": "Cà Rốt Đà Lạt Loại 1",
+        "qty": 1,
+        "price": 28000,
+        "image": "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=500&q=80",
+        "_id": "69d0427a516988e5a3bc6ecf"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "a",
+      "phone": "ádas",
+      "address": "ádas"
+    },
+    "paymentMethod": "Thanh toán khi nhận hàng",
+    "itemsPrice": 239000,
+    "shippingPrice": 30000,
+    "totalPrice": 269000,
+    "orderType": "Online",
+    "isPaid": false,
+    "status": "Đang giao",
+    "createdAt": "2026-04-03T22:43:06.869Z",
+    "updatedAt": "2026-04-03T22:53:37.622Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d04620fdefd9b14b25f947",
+    "user": "69cfa0aed0460f99e23d5823",
+    "orderItems": [
+      {
+        "product": "69cfa0a89f29ee17e3865db8",
+        "name": "Cà Chua Cherry Organic",
+        "qty": 2,
+        "price": 45000,
+        "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500&q=80",
+        "_id": "69d04620fdefd9b14b25f948"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách lẻ",
+      "phone": "",
+      "address": "Mua tại quầy"
+    },
+    "paymentMethod": "Tiền mặt (POS)",
+    "itemsPrice": 90000,
+    "shippingPrice": 0,
+    "discountAmount": 0,
+    "voucherCode": "",
+    "totalPrice": 90000,
+    "orderType": "POS",
+    "isPaid": false,
+    "status": "Chờ xử lý",
+    "createdAt": "2026-04-03T22:58:40.519Z",
+    "updatedAt": "2026-04-03T22:58:40.519Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d04649fdefd9b14b25f97e",
+    "user": "69cfa0aed0460f99e23d5823",
+    "orderItems": [
+      {
+        "product": "69cfa0a89f29ee17e3865db6",
+        "name": "Cải Chíp Hữu Cơ Thủy Canh",
+        "qty": 1,
+        "price": 35000,
+        "image": "https://images.unsplash.com/photo-1557844352-761f2565b576?w=500&q=80",
+        "_id": "69d04649fdefd9b14b25f97f"
+      },
+      {
+        "product": "69cfa0a89f29ee17e3865db7",
+        "name": "Thịt Lợn Sinh Học",
+        "qty": 1,
+        "price": 120000,
+        "image": "https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=600&q=80",
+        "_id": "69d04649fdefd9b14b25f980"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách lẻ",
+      "phone": "",
+      "address": "Mua tại quầy"
+    },
+    "paymentMethod": "Tiền mặt (POS)",
+    "itemsPrice": 155000,
+    "shippingPrice": 0,
+    "discountAmount": 0,
+    "voucherCode": "",
+    "totalPrice": 155000,
+    "orderType": "POS",
+    "isPaid": false,
+    "status": "Chờ xử lý",
+    "createdAt": "2026-04-03T22:59:21.927Z",
+    "updatedAt": "2026-04-03T22:59:21.927Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d04699fdefd9b14b25fa04",
+    "user": "69cfa0aed0460f99e23d5823",
+    "orderItems": [
+      {
+        "product": "69cfa0a89f29ee17e3865dba",
+        "name": "Bông Cải Xanh Baby",
+        "qty": 1,
+        "price": 38000,
+        "image": "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=500&q=80",
+        "_id": "69d04699fdefd9b14b25fa05"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách lẻ",
+      "phone": "",
+      "address": "Mua tại quầy"
+    },
+    "paymentMethod": "Tiền mặt (POS)",
+    "itemsPrice": 38000,
+    "shippingPrice": 0,
+    "discountAmount": 0,
+    "voucherCode": "",
+    "totalPrice": 38000,
+    "orderType": "POS",
+    "isPaid": false,
+    "status": "Chờ xử lý",
+    "createdAt": "2026-04-03T23:00:41.939Z",
+    "updatedAt": "2026-04-03T23:00:41.939Z",
+    "__v": 0
+  }
+]

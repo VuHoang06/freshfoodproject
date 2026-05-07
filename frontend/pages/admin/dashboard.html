@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FreshFood Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8f9fa; }
+        .sidebar-active { background-color: #f0fdf4; color: #15803d; font-weight: 800; border-left: 4px solid #16a34a; }
+        .primary-gradient { background: linear-gradient(135deg, #28a745 0%, #006e25 100%); }
+    </style>
+</head>
+<body class="text-slate-900 antialiased flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6">
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
+            <span class="text-[10px] text-slate-300 tracking-widest font-bold">Hệ thống Admin</span></span>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+            <a href="dashboard.html" class="flex items-center gap-4 py-3 px-4 rounded-xl sidebar-active group">
+                <span class="material-symbols-outlined text-xl">dashboard</span>
+                <span class="text-sm">Tổng quan</span>
+            </a>
+            <a href="products.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">inventory_2</span>
+                <span class="text-sm font-bold">Sản phẩm</span>
+            </a>
+            <a href="orders.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">shopping_cart</span>
+                <span class="text-sm font-bold">Đơn hàng</span>
+            </a>
+            <a href="users.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">group</span>
+                <span class="text-sm font-bold">Khách hàng</span>
+            </a>
+            <a href="promotions.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">sell</span>
+                <span class="text-sm font-bold">Khuyến mãi</span>
+            </a>
+            <a href="staff.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">badge</span>
+                <span class="text-sm font-bold">Nhân viên</span>
+            </a>
+            
+        </nav>
+
+        <div class="px-4 py-6 border-t border-slate-100 mt-auto">
+            <button onclick="logoutAdmin()" class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">logout</span>
+                <span class="text-sm font-bold">Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0 bg-[#f8f9fa]">
+        <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-40">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden text-slate-500"><span class="material-symbols-outlined">menu</span></button>
+                <div class="relative w-64 hidden md:block">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+                    <input type="text" placeholder="Tìm nhanh..." class="w-full bg-slate-100 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-green-600/20 outline-none font-medium">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <div class="text-right">
+                    <p id="admin-header-name" class="text-sm font-extrabold text-slate-900 leading-none uppercase">Admin</p>
+                    <p class="text-[10px] text-green-700 font-bold uppercase mt-1 tracking-tight">Hệ thống</p>
+                </div>
+                <div class="w-10 h-10 rounded-full border-2 border-green-100 overflow-hidden shadow-sm">
+                    <img class="w-full h-full object-cover" src="https://static.vecteezy.com/system/resources/previews/007/335/692/original/account-icon-template-vector.jpg" alt="Avatar">
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-8 space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all hover:bg-green-50/50">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="material-symbols-outlined text-blue-500 bg-blue-50 p-2 rounded-xl">database</span>
+                        <span class="text-green-600 text-[11px] font-bold">+12%</span>
+                    </div>
+                    <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Tổng doanh thu</p>
+                    <p class="text-2xl font-extrabold text-slate-800 mt-1" id="stat-revenue">12,450,000đ</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="material-symbols-outlined text-green-600 bg-green-50 p-2 rounded-xl">shopping_bag</span>
+                        <span class="text-green-600 text-[11px] font-bold">+5%</span>
+                    </div>
+                    <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Đơn hàng mới</p>
+                    <p class="text-2xl font-extrabold text-slate-800 mt-1" id="stat-orders">142</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="material-symbols-outlined text-amber-500 bg-amber-50 p-2 rounded-xl">person_add</span>
+                        <span class="text-slate-400 text-[11px] font-bold">0%</span>
+                    </div>
+                    <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Khách hàng</p>
+                    <p class="text-2xl font-extrabold text-slate-800 mt-1" id="stat-users">24</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all hover:bg-emerald-50/30">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="material-symbols-outlined text-emerald-600 bg-emerald-50 p-2 rounded-xl">inventory_2</span>
+                        <span class="text-slate-400 text-[11px] font-bold">—</span>
+                    </div>
+                    <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">Sản phẩm</p>
+                    <p class="text-2xl font-extrabold text-slate-800 mt-1" id="stat-products">0</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
+                    <h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-widest mb-6">Biểu đồ doanh thu tuần</h3>
+                    <div class="h-72">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col">
+                    <h3 class="text-sm font-extrabold text-slate-900 uppercase tracking-widest mb-6">Đơn mới nhất</h3>
+                    <div id="latest-orders" class="space-y-4 flex-1"></div>
+                    <a href="orders.html" class="mt-6 text-center text-[10px] font-bold text-slate-300 hover:text-green-700 uppercase tracking-widest transition-colors">Xem toàn bộ hệ thống</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+        function logoutAdmin() { localStorage.clear(); window.location.href = '../user/login.html'; }
+
+        // Load thống kê thực từ API
+        let revenueChart;
+        async function loadDashboardStats() {
+            const token = localStorage.getItem('token');
+            if (!token) { window.location.href = '../user/login.html'; return; }
+            try {
+                const res = await fetch('http://localhost:5000/api/dashboard/stats', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    // Cập nhật các thẻ stat nếu có phần tử id
+                    const revEl = document.getElementById('stat-revenue');
+                    const ordEl = document.getElementById('stat-orders');
+                    const usrEl = document.getElementById('stat-users');
+                    const prodEl = document.getElementById('stat-products');
+                    if (revEl) revEl.innerText = (data.revenue || 0).toLocaleString('vi-VN') + 'đ';
+                    if (ordEl) ordEl.innerText = data.totalOrders || 0;
+                    if (usrEl) usrEl.innerText = data.totalUsers || 0;
+                    if (prodEl) prodEl.innerText = data.totalProducts || 0;
+
+                    // latest 3 orders
+                    renderLatestOrders(data.latestOrders || []);
+                    // chart from API (completed orders only)
+                    updateRevenueChart(data.revenueSeries || []);
+                }
+            } catch(e) { console.log('Lỗi tải stats:', e); }
+        }
+        document.addEventListener('DOMContentLoaded', loadDashboardStats);
+
+        function renderLatestOrders(orders) {
+            const el = document.getElementById('latest-orders');
+            if (!el) return;
+            if (!orders.length) {
+                el.innerHTML = `<div class="p-4 bg-slate-50 rounded-2xl text-xs font-bold text-slate-400">Chưa có đơn hàng</div>`;
+                return;
+            }
+            el.innerHTML = orders.slice(0, 3).map(o => {
+                const shortId = '#' + String(o._id || '').slice(-6).toUpperCase();
+                const name = o.shippingAddress?.fullName || 'Khách';
+                const total = (Number(o.totalPrice) || 0).toLocaleString('vi-VN') + 'đ';
+                return `
+                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                        <div>
+                            <p class="text-xs font-extrabold text-slate-800">${shortId}</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">${name}</p>
+                        </div>
+                        <p class="text-xs font-extrabold text-green-700 ">${total}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateRevenueChart(series) {
+            const labels = (series || []).map(s => s.label);
+            const values = (series || []).map(s => s.value || 0);
+            if (revenueChart) {
+                revenueChart.data.labels = labels;
+                revenueChart.data.datasets[0].data = values;
+                revenueChart.update();
+                return;
+            }
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Doanh thu',
+                    data: values,
+                    backgroundColor: '#16a34a',
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { color: '#f8f9fa' }, 
+                        ticks: { 
+                            font: { size: 10, family: 'Inter, system-ui, sans-serif', weight: 'bold' },
+                            callback: function(value) { return (value/1000000) + 'tr'; }
+                        } 
+                    },
+                    x: { grid: { display: false }, ticks: { font: { size: 10, family: 'Inter, system-ui, sans-serif', weight: 'bold' } } }
+                }
+            }
+        });
+        }
+    </script>
+
+        <script>
+            // Set Admin Name
+            document.addEventListener('DOMContentLoaded', () => {
+                const uStr = localStorage.getItem('currentUser');
+                if (uStr) {
+                    const u = JSON.parse(uStr);
+                    const el = document.getElementById('admin-header-name');
+                    if (el) el.innerText = u.displayName || u.username || 'Admin';
+                }
+            });
+        </script>
+    </body>
+</html>

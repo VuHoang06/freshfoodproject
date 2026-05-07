@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đơn hàng - FreshFood Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family:
+          "Be Vietnam Pro",
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background-color: #f8f9fa;
+      }
+      .sidebar-active {
+        background-color: #f0fdf4;
+        color: #15803d;
+        font-weight: 800;
+        border-left: 4px solid #16a34a;
+      }
+      .primary-gradient {
+        background: linear-gradient(135deg, #28a745 0%, #006e25 100%);
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 5px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body class="text-slate-900 antialiased flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside
+      id="sidebar"
+      class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300"
+    >
+      <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6">
+        <span
+          class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none"
+          >FreshFood<br />
+          <span class="text-[10px] text-slate-300 tracking-widest font-bold"
+            >Hệ thống Admin</span
+          ></span
+        >
+      </div>
+
+      <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+        <a
+          href="dashboard.html"
+          class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"
+        >
+          <span class="material-symbols-outlined text-xl">dashboard</span>
+          <span class="text-sm font-bold">Tổng quan</span>
+        </a>
+        <a
+          href="products.html"
+          class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"
+        >
+          <span class="material-symbols-outlined text-xl">inventory_2</span>
+          <span class="text-sm font-bold">Sản phẩm</span>
+        </a>
+        <a
+          href="orders.html"
+          class="flex items-center gap-4 py-3 px-4 rounded-xl sidebar-active"
+        >
+          <span class="material-symbols-outlined text-xl">shopping_cart</span>
+          <span class="text-sm">Đơn hàng</span>
+        </a>
+        <a
+          href="users.html"
+          class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"
+        >
+          <span class="material-symbols-outlined text-xl">group</span>
+          <span class="text-sm font-bold">Khách hàng</span>
+        </a>
+        <a
+          href="promotions.html"
+          class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"
+        >
+          <span class="material-symbols-outlined text-xl">sell</span>
+          <span class="text-sm font-bold">Khuyến mãi</span>
+        </a>
+        <a
+          href="staff.html"
+          class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all"
+        >
+          <span class="material-symbols-outlined text-xl">badge</span>
+          <span class="text-sm font-bold">Nhân viên</span>
+        </a>
+      </nav>
+
+      <div class="px-4 py-6 border-t border-slate-100 mt-auto">
+        <button
+          onclick="logoutAdmin()"
+          class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all"
+        >
+          <span class="material-symbols-outlined text-xl">logout</span>
+          <span class="text-sm font-bold">Đăng xuất</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0 bg-[#f8f9fa] overflow-hidden">
+      <header
+        class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-40 shrink-0"
+      >
+        <div class="flex items-center gap-4">
+          <button onclick="toggleSidebar()" class="lg:hidden text-slate-500">
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+          <h1 class="text-lg font-bold text-slate-800 tracking-tight">
+            Quản lý Đơn hàng
+          </h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <!-- Search -->
+          <div class="relative hidden md:block">
+            <span
+              class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-sm"
+              >search</span
+            >
+            <input
+              id="search-input"
+              type="text"
+              placeholder="Tìm mã đơn, khách hàng..."
+              oninput="filterOrders()"
+              class="w-64 bg-white border border-slate-100 rounded-full py-2 pl-10 pr-4 text-xs font-bold focus:ring-2 focus:ring-green-500/20 outline-none transition"
+            />
+          </div>
+          <!-- Status filter -->
+          <select
+            id="status-filter"
+            onchange="filterOrders()"
+            class="bg-white border border-slate-100 rounded-full px-4 py-2 text-xs font-bold text-slate-600 focus:ring-2 focus:ring-green-500/20 outline-none cursor-pointer"
+          >
+            <option value="">Tất cả trạng thái</option>
+            <option value="Chờ xử lý">Chờ xử lý</option>
+            <option value="Đang giao">Đang giao</option>
+            <option value="Hoàn thành">Hoàn thành</option>
+            <option value="Đã hủy">Đã hủy</option>
+          </select>
+        </div>
+      </header>
+
+      <main
+        class="flex-1 overflow-y-auto p-6 md:p-10 space-y-8 custom-scrollbar"
+      >
+        <!-- Stats cards -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="stat-cards">
+          <div
+            class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3"
+          >
+            <span
+              class="material-symbols-outlined text-amber-500 bg-amber-50 p-2 rounded-xl text-xl"
+              >schedule</span
+            >
+            <div>
+              <p
+                class="text-[10px] font-black text-slate-400 uppercase tracking-widest"
+              >
+                Chờ duyệt
+              </p>
+              <p
+                class="text-xl font-extrabold text-amber-600"
+                id="stat-pending"
+              >
+                —
+              </p>
+            </div>
+          </div>
+          <div
+            class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3"
+          >
+            <span
+              class="material-symbols-outlined text-blue-500 bg-blue-50 p-2 rounded-xl text-xl"
+              >local_shipping</span
+            >
+            <div>
+              <p
+                class="text-[10px] font-black text-slate-400 uppercase tracking-widest"
+              >
+                Đang giao
+              </p>
+              <p
+                class="text-xl font-extrabold text-blue-600"
+                id="stat-shipping"
+              >
+                —
+              </p>
+            </div>
+          </div>
+          <div
+            class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3"
+          >
+            <span
+              class="material-symbols-outlined text-green-600 bg-green-50 p-2 rounded-xl text-xl"
+              >verified</span
+            >
+            <div>
+              <p
+                class="text-[10px] font-black text-slate-400 uppercase tracking-widest"
+              >
+                Hoàn thành
+              </p>
+              <p class="text-xl font-extrabold text-green-700" id="stat-done">
+                —
+              </p>
+            </div>
+          </div>
+          <div
+            class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3"
+          >
+            <span
+              class="material-symbols-outlined text-red-500 bg-red-50 p-2 rounded-xl text-xl"
+              >cancel</span
+            >
+            <div>
+              <p
+                class="text-[10px] font-black text-slate-400 uppercase tracking-widest"
+              >
+                Đã hủy
+              </p>
+              <p
+                class="text-xl font-extrabold text-red-600"
+                id="stat-cancelled"
+              >
+                —
+              </p>
+            </div>
+          </div>
+          <div
+            class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-3"
+          >
+            <span
+              class="material-symbols-outlined text-purple-500 bg-purple-50 p-2 rounded-xl text-xl"
+              >payments</span
+            >
+            <div>
+              <p
+                class="text-[10px] font-black text-slate-400 uppercase tracking-widest"
+              >
+                Tổng đơn
+              </p>
+              <p class="text-xl font-extrabold text-purple-600" id="stat-total">
+                —
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders table -->
+        <div
+          class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden"
+        >
+          <!-- Loading -->
+          <div id="orders-loading" class="py-16 text-center">
+            <div
+              class="inline-block w-8 h-8 border-4 border-green-600 border-t-transparent rounded-full animate-spin mb-3"
+            ></div>
+            <p
+              class="text-slate-400 font-bold text-xs uppercase tracking-widest"
+            >
+              Đang tải đơn hàng...
+            </p>
+          </div>
+          <!-- Empty -->
+          <div id="orders-empty" class="hidden py-20 text-center">
+            <span class="material-symbols-outlined text-8xl text-slate-200"
+              >receipt_long</span
+            >
+            <p
+              class="font-black uppercase tracking-widest mt-4 text-sm text-slate-400"
+            >
+              Chưa có đơn hàng nào
+            </p>
+          </div>
+          <!-- Table -->
+          <div id="orders-table-wrapper" class="hidden overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead
+                class="bg-slate-50/50 border-b border-slate-100 uppercase tracking-widest"
+              >
+                <tr class="text-[10px] font-extrabold text-slate-400">
+                  <th class="px-6 py-5">Mã đơn / Khách hàng</th>
+                  <th class="px-6 py-5">Sản phẩm</th>
+                  <th class="px-6 py-5">Ngày đặt</th>
+                  <th class="px-6 py-5">Giá trị</th>
+                  <th class="px-6 py-5">Hình thức TT</th>
+                  <th class="px-6 py-5 text-center">Trạng thái</th>
+                  <th class="px-6 py-5 text-center">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody
+                id="orders-tbody"
+                class="divide-y divide-slate-50 font-bold"
+              ></tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div
+      id="status-modal"
+      class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center"
+    >
+      <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl">
+        <h3 class="text-xl font-black text-slate-800 mb-2">
+          Cập nhật trạng thái
+        </h3>
+        <p class="text-slate-400 text-sm mb-6">
+          Đơn hàng:
+          <span id="modal-order-id" class="font-bold text-green-700"></span>
+        </p>
+        <select
+          id="modal-status-select"
+          class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-sm focus:ring-2 focus:ring-green-500 outline-none mb-6"
+        >
+          <option value="Chờ xử lý">Chờ xử lý</option>
+          <option value="Đang giao">Đang giao</option>
+          <option value="Hoàn thành">Hoàn thành</option>
+          <option value="Đã hủy">Đã hủy</option>
+        </select>
+        <div class="flex gap-3">
+          <button
+            onclick="closeStatusModal()"
+            class="flex-1 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 transition text-sm"
+          >
+            Hủy
+          </button>
+          <button
+            onclick="confirmUpdateStatus()"
+            class="flex-1 py-3 bg-green-700 text-white font-bold rounded-xl hover:bg-green-600 transition text-sm shadow-lg"
+          >
+            Xác nhận
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="toast-container"
+      class="fixed top-8 right-8 z-[200] flex flex-col gap-2 pointer-events-none"
+    ></div>
+
+    <script>
+      function toggleSidebar() {
+        document
+          .getElementById("sidebar")
+          .classList.toggle("-translate-x-full");
+      }
+
+      let allOrders = [];
+      let currentOrderId = null;
+      const API = "http://localhost:5000/api";
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          window.location.href = "../user/login.html";
+          return;
+        }
+        fetchOrders();
+      });
+
+      function logoutAdmin() {
+        localStorage.clear();
+        window.location.href = "../user/login.html";
+      }
+
+      async function fetchOrders() {
+        const token = localStorage.getItem("token");
+        try {
+          const res = await fetch(`${API}/orders`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          document.getElementById("orders-loading").classList.add("hidden");
+          if (res.ok) {
+            allOrders = await res.json();
+            updateStats(allOrders);
+            renderOrders(allOrders);
+          } else if (res.status === 401 || res.status === 403) {
+            showToast(
+              "Không có quyền truy cập. Vui lòng đăng nhập lại.",
+              "error",
+            );
+            setTimeout(() => {
+              window.location.href = "../user/login.html";
+            }, 1500);
+          } else {
+            document.getElementById("orders-empty").classList.remove("hidden");
+          }
+        } catch (e) {
+          document.getElementById("orders-loading").classList.add("hidden");
+          document.getElementById("orders-empty").classList.remove("hidden");
+          showToast("Lỗi kết nối server. Đảm bảo backend đang chạy.", "error");
+        }
+      }
+
+      function updateStats(orders) {
+        document.getElementById("stat-pending").innerText = orders.filter(
+          (o) => o.status === "Chờ xử lý",
+        ).length;
+        document.getElementById("stat-shipping").innerText = orders.filter(
+          (o) => o.status === "Đang giao",
+        ).length;
+        document.getElementById("stat-done").innerText = orders.filter(
+          (o) => o.status === "Hoàn thành",
+        ).length;
+        document.getElementById("stat-cancelled").innerText = orders.filter(
+          (o) => o.status === "Đã hủy",
+        ).length;
+        document.getElementById("stat-total").innerText = orders.length;
+      }
+
+      function filterOrders() {
+        const search = document
+          .getElementById("search-input")
+          .value.toLowerCase();
+        const statusFilter = document.getElementById("status-filter").value;
+        const filtered = allOrders.filter((o) => {
+          const matchStatus = !statusFilter || o.status === statusFilter;
+          const customer = (
+            o.user?.fullName ||
+            o.shippingAddress?.fullName ||
+            ""
+          ).toLowerCase();
+          const id = o._id.toLowerCase();
+          const matchSearch =
+            !search || customer.includes(search) || id.includes(search);
+          return matchStatus && matchSearch;
+        });
+        renderOrders(filtered);
+      }
+
+      const STATUS_STYLE = {
+        "Chờ xử lý": "bg-amber-50 text-amber-600 border-amber-100",
+        "Đang giao": "bg-indigo-50 text-indigo-600 border-indigo-100",
+        "Hoàn thành": "bg-green-50 text-green-700 border-green-100",
+        "Đã hủy": "bg-red-50 text-red-600 border-red-100",
+      };
+
+      function renderOrders(orders) {
+        const wrapper = document.getElementById("orders-table-wrapper");
+        const empty = document.getElementById("orders-empty");
+        const tbody = document.getElementById("orders-tbody");
+
+        if (orders.length === 0) {
+          wrapper.classList.add("hidden");
+          empty.classList.remove("hidden");
+          return;
+        }
+        empty.classList.add("hidden");
+        wrapper.classList.remove("hidden");
+
+        tbody.innerHTML = orders
+          .map((order) => {
+            const shortId = order._id.slice(-8).toUpperCase();
+            const customer =
+              order.user?.fullName ||
+              order.shippingAddress?.fullName ||
+              "Khách vãng lai";
+            const firstItem = order.orderItems?.[0];
+            const itemStr = firstItem
+              ? `${firstItem.name}${order.orderItems.length > 1 ? ` +${order.orderItems.length - 1}` : ""}`
+              : "—";
+            const dateStr = new Date(order.createdAt).toLocaleDateString(
+              "vi-VN",
+              { day: "2-digit", month: "2-digit", year: "numeric" },
+            );
+            const statusCls =
+              STATUS_STYLE[order.status] ||
+              "bg-slate-50 text-slate-500 border-slate-100";
+
+            return `
+                <tr class="hover:bg-slate-50/50 transition duration-200 group">
+                    <td class="px-6 py-5">
+                        <p class="text-slate-900 font-extrabold text-sm">#${shortId}</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">${customer}</p>
+                    </td>
+                    <td class="px-6 py-5 text-xs text-slate-600 max-w-[160px] truncate">${itemStr}</td>
+                    <td class="px-6 py-5 text-xs text-slate-500 font-bold uppercase">${dateStr}</td>
+                    <td class="px-6 py-5 text-slate-900 font-extrabold">${(order.totalPrice || 0).toLocaleString("vi-VN")}đ</td>
+                    <td class="px-6 py-5">
+                        <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-slate-50 text-slate-500 border border-slate-100">${order.paymentMethod?.replace("Thanh toán khi nhận hàng", "COD") || "—"}</span>
+                    </td>
+                    <td class="px-6 py-5 text-center">
+                        <span class="px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${statusCls}">${order.status || "Chờ xử lý"}</span>
+                    </td>
+                    <td class="px-6 py-5">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="openStatusModal('${order._id}', '${order.status}')" title="Cập nhật trạng thái"
+                                class="p-2 bg-slate-50 rounded-full text-slate-400 hover:text-green-700 hover:bg-green-50 transition shadow-sm">
+                                <span class="material-symbols-outlined text-lg">edit</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
+          })
+          .join("");
+      }
+
+      function openStatusModal(orderId, currentStatus) {
+        currentOrderId = orderId;
+        document.getElementById("modal-order-id").innerText =
+          "#" + orderId.slice(-8).toUpperCase();
+        document.getElementById("modal-status-select").value =
+          currentStatus || "Chờ xử lý";
+        document.getElementById("status-modal").classList.remove("hidden");
+      }
+
+      function closeStatusModal() {
+        document.getElementById("status-modal").classList.add("hidden");
+        currentOrderId = null;
+      }
+
+      async function confirmUpdateStatus() {
+        if (!currentOrderId) return;
+        const token = localStorage.getItem("token");
+        const newStatus = document.getElementById("modal-status-select").value;
+        try {
+          const res = await fetch(`${API}/orders/${currentOrderId}/status`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ status: newStatus }),
+          });
+          if (res.ok) {
+            // Cập nhật local data để không cần reload
+            const order = allOrders.find((o) => o._id === currentOrderId);
+            if (order) order.status = newStatus;
+            updateStats(allOrders);
+            filterOrders();
+            showToast("Cập nhật trạng thái thành công!");
+          } else {
+            showToast("Lỗi cập nhật trạng thái", "error");
+          }
+        } catch (e) {
+          showToast("Lỗi kết nối server", "error");
+        }
+        closeStatusModal();
+      }
+
+      function showToast(message, type = "success") {
+        const container = document.getElementById("toast-container");
+        const toast = document.createElement("div");
+        const icon = type === "success" ? "✅" : "⚠️";
+        const color =
+          type === "success"
+            ? "bg-slate-900 border-green-500"
+            : "bg-red-600 border-red-400";
+        toast.className = `transform translate-x-10 opacity-0 transition-all duration-300 px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 font-bold text-sm text-white ${color} border-l-4 pointer-events-auto`;
+        toast.innerHTML = `<span class="text-lg">${icon}</span> <span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(
+          () => toast.classList.remove("translate-x-10", "opacity-0"),
+          10,
+        );
+        setTimeout(() => {
+          toast.classList.add("translate-x-10", "opacity-0");
+          setTimeout(() => toast.remove(), 300);
+        }, 3500);
+      }
+    </script>
+
+    <script>
+      // Set Admin Name
+      document.addEventListener("DOMContentLoaded", () => {
+        const uStr = localStorage.getItem("currentUser");
+        if (uStr) {
+          const u = JSON.parse(uStr);
+          const el = document.getElementById("admin-header-name");
+          if (el) el.innerText = u.displayName || u.username || "Admin";
+        }
+      });
+    </script>
+  </body>
+</html>

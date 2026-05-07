@@ -1,0 +1,25 @@
+/* style.css */
+.chart-container { position: relative; width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; height: 300px; max-height: 400px; }
+@media (min-width: 768px) { .chart-container { height: 350px; } }
+
+body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; background-color: #f8fafc; }
+.smooth-transition { transition: all 0.3s ease-in-out; }
+.hide-scroll::-webkit-scrollbar { display: none; }
+.hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+.nav-link.active { color: #15803d; border-bottom: 2px solid #15803d; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #15803d; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #166534; }
+
+html { scroll-behavior: smooth; }
+.fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.pos-scrollbar::-webkit-scrollbar { width: 4px; }
+.pos-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }

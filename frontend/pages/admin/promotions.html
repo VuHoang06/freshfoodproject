@@ -1,0 +1,417 @@
+<script>
+    const API_BASE_URL = 'http://localhost:5000/api';
+
+    let promosData = [];
+    let isEditMode = false;
+
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('-translate-x-full');
+    }
+
+    function logoutAdmin() {
+        localStorage.clear();
+        window.location.href = '../user/login.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadPromotions();
+    });
+
+    // =========================
+    // LOAD PROMOTIONS
+    // =========================
+    async function loadPromotions() {
+        const token = localStorage.getItem('token');
+        const grid = document.getElementById('tickets-grid');
+
+        grid.innerHTML = `
+            <div class="col-span-3 text-center py-20 text-slate-400 font-bold">
+                Đang tải dữ liệu...
+            </div>
+        `;
+
+        try {
+
+            const res = await fetch(`${API_BASE_URL}/promotions`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            const data = await res.json();
+
+            console.log('[loadPromotions]', data);
+
+            if (!res.ok) {
+                throw new Error(data.message || `HTTP ${res.status}`);
+            }
+
+            promosData = Array.isArray(data)
+                ? data
+                : (data.promotions || []);
+
+            renderTickets(promosData);
+
+        } catch (error) {
+
+            console.error('Load promotions error:', error);
+
+            grid.innerHTML = `
+                <div class="col-span-3 text-center py-20 text-red-500 font-bold">
+                    ⚠️ Không tải được voucher: ${error.message}
+                </div>
+            `;
+        }
+    }
+
+    // =========================
+    // RENDER PROMOTIONS
+    // =========================
+    function renderTickets(promos) {
+
+        const grid = document.getElementById('tickets-grid');
+
+        if (!promos.length) {
+            grid.innerHTML = `
+                <div class="col-span-3 text-center py-20 text-slate-400 font-bold">
+                    Chưa có voucher nào.
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = promos.map(promo => {
+
+            const discountType = promo.discountType || 'fixed';
+            const discountValue = Number(promo.discountValue || 0);
+
+            const isPercent = discountType === 'percent';
+
+            const displayDiscount = isPercent
+                ? `${discountValue}%`
+                : `${discountValue.toLocaleString('vi-VN')}đ`;
+
+            const minOrderAmount = Number(promo.minOrderAmount || 0);
+
+            const expiryDate = promo.expiryDate
+                ? new Date(promo.expiryDate).toLocaleDateString('vi-VN')
+                : '--';
+
+            return `
+                <div class="ticket group">
+
+                    <div class="ticket-left px-4 ${isPercent ? 'bg-green-50' : 'bg-blue-50'}">
+
+                        <span class="
+                            ${isPercent ? 'text-4xl text-green-600' : 'text-2xl text-blue-600'}
+                            font-black tracking-tighter leading-none mb-1
+                        ">
+                            ${displayDiscount}
+                        </span>
+
+                        <span class="text-[9px] font-black uppercase tracking-widest text-slate-700">
+                            ${isPercent ? 'Giảm theo %' : 'Giảm trực tiếp'}
+                        </span>
+
+                    </div>
+
+                    <div class="ticket-right p-5">
+
+                        <div>
+
+                            <div class="flex justify-between items-start gap-2 mb-3">
+
+                                <h3 class="font-black text-slate-800 text-sm uppercase">
+                                    ${escapeHtml(promo.code)}
+                                </h3>
+
+                                <span class="
+                                    px-2 py-1 rounded text-[9px] font-black uppercase tracking-widest
+                                    ${promo.isActive
+                                        ? 'bg-green-50 text-green-700'
+                                        : 'bg-red-50 text-red-600'}
+                                ">
+                                    ${promo.isActive ? 'Đang chạy' : 'Đã tắt'}
+                                </span>
+
+                            </div>
+
+                            <p class="text-xs text-slate-500 font-bold mb-4">
+                                Đơn tối thiểu:
+                                ${minOrderAmount.toLocaleString('vi-VN')}đ
+                            </p>
+
+                            <div class="coupon-code inline-flex bg-slate-50 border border-slate-200 rounded-lg px-4 py-2">
+                                <span class="font-black text-slate-600 tracking-wider uppercase text-xs">
+                                    ${escapeHtml(promo.code)}
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                                HSD: ${expiryDate}
+                            </span>
+
+                            <div class="flex gap-2">
+
+                                <button
+                                    onclick="editPromotion('${promo._id}')"
+                                    class="w-7 h-7 bg-slate-50 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg flex items-center justify-center transition"
+                                >
+                                    <span class="material-symbols-outlined text-sm">edit</span>
+                                </button>
+
+                                <button
+                                    onclick="deletePromotion('${promo._id}')"
+                                    class="w-7 h-7 bg-slate-50 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg flex items-center justify-center transition"
+                                >
+                                    <span class="material-symbols-outlined text-sm">delete</span>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+        }).join('');
+    }
+
+    // =========================
+    // OPEN MODAL
+    // =========================
+    function openCreateModal() {
+
+        isEditMode = false;
+
+        document.getElementById('promo-id').value = '';
+        document.getElementById('promo-code').value = '';
+        document.getElementById('promo-min').value = '';
+        document.getElementById('promo-percent').value = '';
+        document.getElementById('promo-amount').value = '';
+        document.getElementById('promo-max').value = '';
+        document.getElementById('promo-limit').value = '';
+
+        const modal = document.getElementById('create-modal');
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeCreateModal() {
+        const modal = document.getElementById('create-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    // =========================
+    // EDIT PROMOTION
+    // =========================
+    function editPromotion(id) {
+
+        const promo = promosData.find(p => p._id === id);
+
+        if (!promo) {
+            return alert('Không tìm thấy voucher');
+        }
+
+        isEditMode = true;
+
+        document.getElementById('promo-id').value = promo._id;
+        document.getElementById('promo-code').value = promo.code || '';
+        document.getElementById('promo-min').value = promo.minOrderAmount || '';
+        document.getElementById('promo-max').value = promo.maxDiscount || '';
+        document.getElementById('promo-limit').value = promo.usageLimit || '';
+
+        if (promo.discountType === 'percent') {
+            document.getElementById('promo-percent').value = promo.discountValue;
+            document.getElementById('promo-amount').value = '';
+        } else {
+            document.getElementById('promo-amount').value = promo.discountValue;
+            document.getElementById('promo-percent').value = '';
+        }
+
+        document.getElementById('promo-expiry').value =
+            promo.expiryDate
+                ? new Date(promo.expiryDate).toISOString().slice(0, 10)
+                : '';
+
+        document.getElementById('promo-active').checked = promo.isActive;
+
+        document.getElementById('promo-active-container')
+            .classList.remove('hidden');
+
+        const modal = document.getElementById('create-modal');
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    // =========================
+    // SAVE PROMOTION
+    // =========================
+    async function savePromotion() {
+
+        const token = localStorage.getItem('token');
+
+        const id = document.getElementById('promo-id').value;
+
+        const code = document.getElementById('promo-code').value
+            .trim()
+            .toUpperCase();
+
+        const minOrderAmount = Number(document.getElementById('promo-min').value || 0);
+
+        const percentValue = Number(document.getElementById('promo-percent').value || 0);
+
+        const fixedValue = Number(document.getElementById('promo-amount').value || 0);
+
+        const maxDiscount = Number(document.getElementById('promo-max').value || 0);
+
+        const usageLimit = Number(document.getElementById('promo-limit').value || 0);
+
+        const expiryDate = document.getElementById('promo-expiry').value;
+
+        const isActive = document.getElementById('promo-active').checked;
+
+        if (!code) {
+            return alert('Vui lòng nhập mã voucher');
+        }
+
+        if (percentValue <= 0 && fixedValue <= 0) {
+            return alert('Vui lòng nhập giá trị giảm');
+        }
+
+        const discountType = percentValue > 0
+            ? 'percent'
+            : 'fixed';
+
+        const discountValue = percentValue > 0
+            ? percentValue
+            : fixedValue;
+
+        const bodyData = {
+            code,
+            discountType,
+            discountValue,
+            minOrderAmount,
+            maxDiscount,
+            usageLimit,
+            expiryDate,
+            isActive
+        };
+
+        console.log('[savePromotion] bodyData:', bodyData);
+
+        try {
+
+            const url = isEditMode
+                ? `${API_BASE_URL}/promotions/${id}`
+                : `${API_BASE_URL}/promotions`;
+
+            const method = isEditMode ? 'PUT' : 'POST';
+
+            const res = await fetch(url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(bodyData)
+            });
+
+            const data = await res.json();
+
+            console.log('[savePromotion] response:', data);
+
+            if (!res.ok) {
+                throw new Error(data.message || `HTTP ${res.status}`);
+            }
+
+            closeCreateModal();
+
+            await loadPromotions();
+
+            alert(
+                isEditMode
+                    ? '✅ Cập nhật voucher thành công!'
+                    : '✅ Tạo voucher thành công!'
+            );
+
+        } catch (error) {
+
+            console.error('Save promotion error:', error);
+
+            alert(`⚠️ ${error.message}`);
+        }
+    }
+
+    // =========================
+    // DELETE PROMOTION
+    // =========================
+    async function deletePromotion(id) {
+
+        console.log('DELETE PROMOTION ID:', id);
+
+        if (!id || id === 'undefined') {
+            return alert('❌ ID voucher không hợp lệ');
+        }
+
+        if (!confirm('Bạn có chắc chắn muốn xóa voucher này?')) {
+            return;
+        }
+
+        const token = localStorage.getItem('token');
+
+        try {
+
+            const res = await fetch(
+                `${API_BASE_URL}/promotions/${id}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
+
+            const data = await res.json();
+
+            console.log('[deletePromotion]', data);
+
+            if (!res.ok) {
+                throw new Error(data.message || `HTTP ${res.status}`);
+            }
+
+            await loadPromotions();
+
+            alert('🗑️ Đã xóa voucher thành công!');
+
+        } catch (error) {
+
+            console.error('Delete promotion error:', error);
+
+            alert(`⚠️ ${error.message}`);
+        }
+    }
+
+    // =========================
+    // ESCAPE HTML
+    // =========================
+    function escapeHtml(str) {
+        return String(str || '').replace(/[&<>"']/g, s => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        }[s]));
+    }
+</script>

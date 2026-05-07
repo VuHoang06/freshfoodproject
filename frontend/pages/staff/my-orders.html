@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn hàng của tôi | FreshFood Staff</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <style>
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8f9fa; }
+        .sidebar-active { background-color: #f0fdf4; color: #15803d; font-weight: 800; border-left: 4px solid #16a34a; }
+        .primary-gradient { background: linear-gradient(135deg, #28a745 0%, #006e25 100%); }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-[#f8f9fa] text-slate-900 antialiased flex h-screen overflow-hidden">
+
+    <!-- Sidebar (Admin Style) -->
+    <aside id="sidebar" class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6 shrink-0">
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
+            <span class="text-[10px] text-slate-300 tracking-widest font-bold uppercase">Nhân viên trực</span></span>
+        </div>
+        <nav class="flex flex-col gap-1 flex-1 overflow-y-auto px-4">
+            <a href="dashboard.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">dashboard</span><span class="text-sm font-bold">Tổng quan ca</span>
+            </a>
+            <a href="pos.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">point_of_sale</span><span class="text-sm font-bold">Bán hàng (POS)</span>
+            </a>
+            <a href="my-orders.html" class="flex items-center gap-4 py-3 px-4 rounded-xl sidebar-active">
+                <span class="material-symbols-outlined text-xl">receipt_long</span><span class="text-sm">Đơn hàng của mình</span>
+            </a>
+            <a href="inventory-check.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">inventory_2</span><span class="text-sm font-bold">Kiểm kho nhanh</span>
+            </a>
+        </nav>
+        
+        <div class="mt-auto px-4 pb-8">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-center ">
+                <p id="sidebar-shift-label" class="text-[10px] font-bold text-green-700 uppercase mb-3 tracking-widest text-center">Ca làm việc: ---</p>
+                <button onclick="window.location.href='end.html'" class="w-full py-3 primary-gradient text-white font-extrabold rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs uppercase tracking-widest active:scale-95 transition-transform">
+                    <span class="material-symbols-outlined text-sm font-bold">logout</span> Kết thúc ca
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0 bg-[#f8f9fa] overflow-hidden">
+        <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-40 shrink-0">
+            <div class="flex items-center gap-4 flex-1 max-w-xl">
+                <button onclick="toggleSidebar()" class="lg:hidden text-slate-500 shrink-0"><span class="material-symbols-outlined">menu</span></button>
+                <h1 class="text-lg font-extrabold text-slate-900 tracking-tight  uppercase">Lịch sử bán hàng cá nhân</h1>
+            </div>
+            
+            <div class="flex gap-4 p-1 bg-slate-100 rounded-full shrink-0">
+                <button onclick="setFilter('week')" id="btn-week" class="px-8 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all bg-white shadow-sm text-green-700 ">Tuần này</button>
+                <button onclick="setFilter('month')" id="btn-month" class="px-8 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all text-slate-400 hover:text-slate-600 ">Tháng này</button>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-10 space-y-10 custom-scrollbar">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-3 bg-white p-10 rounded-[2.5rem] border border-slate-100 shadow-sm flex flex-col justify-between relative overflow-hidden transition-all hover:bg-green-50/20 group h-64">
+                    <div class="relative z-10">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-green-700 mb-6 block ">Cột mốc doanh thu cá nhân</span>
+                        <div class="flex items-baseline gap-2 mb-10">
+                            <span id="statRevenue" class="text-7xl font-black  tracking-tighter text-slate-900 tabular-nums">0</span>
+                            <span class="text-xs font-black text-slate-300 uppercase tracking-widest">VNĐ</span>
+                        </div>
+                        <div class="flex items-end gap-1.5 h-12">
+                            <div class="flex-1 bg-green-50 rounded-full h-[40%]"></div>
+                            <div class="flex-1 bg-green-100 rounded-full h-[60%]"></div>
+                            <div class="flex-1 bg-green-50 rounded-full h-[55%]"></div>
+                            <div class="flex-1 bg-green-200 rounded-full h-[80%]"></div>
+                            <div class="flex-1 bg-green-100 rounded-full h-[70%]"></div>
+                            <div class="flex-1 bg-green-300 rounded-full h-[95%]"></div>
+                            <div class="flex-1 primary-gradient rounded-full h-full shadow-lg shadow-green-600/30"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 text-white rounded-[2.5rem] p-10 flex flex-col justify-between shadow-2xl h-64 relative overflow-hidden group">
+                    <div class="flex justify-between items-start  relative z-10">
+                        <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/5">
+                            <span class="material-symbols-outlined text-emerald-400">shopping_basket</span>
+                        </div>
+                        <span class="text-[9px] font-black bg-emerald-500 text-white px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg shadow-emerald-500/20 underline-none">Best Seller</span>
+                    </div>
+                    <div class="relative z-10">
+                        <span id="statCount" class="text-7xl font-black block mb-1  tracking-tighter tabular-nums">0</span>
+                        <span class="text-white/30 text-[9px] font-black uppercase tracking-[0.3em] ">Tổng hóa đơn thành công</span>
+                    </div>
+                    <span class="material-symbols-outlined absolute -right-8 -bottom-8 text-[180px] text-white/5 rotate-12 pointer-events-none group-hover:rotate-0 transition-transform duration-700">receipt_long</span>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
+                <div class="px-10 py-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
+                    <h3 class="font-black text-slate-900 uppercase tracking-widest  text-xs">Giao dịch cá nhân mới nhất</h3>
+                    <div class="relative w-80">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-sm">search</span>
+                        <input class="w-full bg-white border border-slate-100 rounded-full py-2.5 pl-12 pr-6 text-[10px] font-black uppercase tracking-widest  focus:ring-2 focus:ring-green-600/10 outline-none transition-all placeholder:text-slate-300" placeholder="Tìm theo mã ID..." type="text"/>
+                    </div>
+                </div>
+                <div class="overflow-x-auto min-h-[400px]">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50/80 text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] border-b border-slate-50 ">
+                            <tr>
+                                <th class="px-10 py-6  tracking-tighter -none ">Mã Đơn / POS ID</th>
+                                <th class="px-10 py-6 -none ">Sản phẩm chi tiết</th>
+                                <th class="px-10 py-6 -none ">Thời Gian Ghi Nhận</th>
+                                <th class="px-10 py-6 text-right -none ">Tổng Tiền</th>
+                                <th class="px-10 py-6 text-center -none ">Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTableBody" class="divide-y divide-slate-50 font-bold">
+                            <!-- Orders dynamically rendered -->
+                        </tbody>
+                    </table>
+                    <div id="emptyState" class="hidden p-32 text-center flex flex-col items-center opacity-20 ">
+                        <span class="material-symbols-outlined text-9xl">receipt_long</span>
+                        <p class="font-black uppercase tracking-[0.4em] mt-8 text-sm">Quầy của bạn chưa có dữ liệu</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+        let currentFilter = 'week';
+        let allOrders = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            ensureShift();
+            ensureStaffAuth();
+            loadMyOrders();
+        });
+
+        
+        function getShift() {
+            try { return JSON.parse(localStorage.getItem('STAFF_SHIFT_SESSION') || 'null'); } catch { return null; }
+        }
+        function ensureShift() {
+            const shift = getShift();
+            const sLabel = document.getElementById('sidebar-shift-label');
+            if (!shift || !shift.startedAt) {
+                alert('Vui lòng chọn ca làm việc trước!');
+                window.location.href = 'dashboard.html';
+            } else if(sLabel) {
+                sLabel.innerText = 'Ca làm việc: ' + shift.name;
+            }
+        }
+        function ensureStaffAuth() {
+            const token = localStorage.getItem('token');
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userStr = localStorage.getItem('currentUser');
+            if (!token || !isLoggedIn || !userStr) { window.location.href = '../user/login.html'; return; }
+            const u = JSON.parse(userStr);
+            if (u.role !== 'staff' && u.role !== 'admin') window.location.href = '../user/login.html';
+        }
+
+        async function loadMyOrders() {
+            // Ưu tiên đọc từ localStorage (đơn POS local)
+            const localOrders = JSON.parse(localStorage.getItem('STAFF_MY_ORDERS') || '[]');
+
+            // Thử lấy thêm từ API (đơn POS của staff hiện tại)
+            const token = localStorage.getItem('token');
+            let apiOrders = [];
+            try {
+                const res = await fetch('http://localhost:5000/api/orders/my-pos', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    // Chuyển đổi format API sang format local
+                    apiOrders = (data || []).map(o => ({
+                        id: '#POS-' + String(o._id || '').slice(-6).toUpperCase(),
+                        orderId: o._id || o.id,
+                        timestamp: o.createdAt || o.timestamp || new Date().toISOString(),
+                        items: (o.orderItems || []).map(it => ({ name: it.name, price: it.price, qty: it.qty })),
+                        subtotal: o.itemsPrice || o.totalPrice || 0,
+                        discount: o.discountAmount || 0,
+                        total: o.totalPrice || 0,
+                        staffName: o.staffName || '',
+                        status: o.status || 'Hoàn thành'
+                    }));
+                }
+            } catch (e) { /* Dùng localOrders nếu API lỗi */ }
+
+            // Gộp và loại trùng theo orderId
+            const mergedMap = new Map();
+            [...localOrders, ...apiOrders].forEach(o => {
+                if (o.orderId && !mergedMap.has(o.orderId)) mergedMap.set(o.orderId, o);
+                else if (!o.orderId) mergedMap.set(o.id + o.timestamp, o);
+            });
+            allOrders = Array.from(mergedMap.values()).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            renderOrders();
+        }
+
+        function setFilter(type) {
+            currentFilter = type;
+            document.getElementById('btn-week').className = type === 'week' 
+                ? 'px-8 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all bg-white shadow-sm text-green-700 '
+                : 'px-8 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all text-slate-400 hover:text-slate-600 ';
+            document.getElementById('btn-month').className = type === 'month' 
+                ? 'px-8 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all bg-white shadow-sm text-green-700 '
+                : 'px-8 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all text-slate-400 hover:text-slate-600 ';
+            renderOrders();
+        }
+
+        function renderOrders() {
+            const now = new Date();
+            
+            const filtered = allOrders.filter(order => {
+                const orderDate = new Date(order.timestamp);
+                if (currentFilter === 'week') {
+                    const diffDays = Math.ceil(Math.abs(now - orderDate) / (1000 * 60 * 60 * 24));
+                    return diffDays <= 7;
+                } else {
+                    return orderDate.getMonth() === now.getMonth() && orderDate.getFullYear() === now.getFullYear();
+                }
+            });
+
+            const tbody = document.getElementById('orderTableBody');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                updateStats(0, 0);
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            let totalRev = 0;
+
+            tbody.innerHTML = filtered.map(order => {
+                totalRev += Number(order.total) || 0;
+                const items = order.items || [];
+                const itemsStr = items.length > 0
+                    ? (items[0].name + (items.length > 1 ? ` + ${items.length - 1} món khác` : ''))
+                    : 'Không rõ';
+                const timeStr = new Date(order.timestamp).toLocaleString('vi-VN', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+                const statusClass = order.status === 'Hoàn thành' || order.status === 'POS'
+                    ? 'bg-green-50 text-green-700 border-green-100'
+                    : 'bg-amber-50 text-amber-700 border-amber-100';
+                const statusLabel = order.status === 'Hoàn thành' || order.status === 'POS' ? 'Hoàn thành' : (order.status || 'Hoàn thành');
+
+                return `
+                    <tr class="hover:bg-green-50/20 transition-all border-l-4 border-l-transparent hover:border-l-green-600 group">
+                        <td class="px-10 py-6">
+                            <span class="font-black text-green-700 text-sm tracking-tighter uppercase">${escapeHtml(order.id || '')}</span>
+                        </td>
+                        <td class="px-10 py-6">
+                            <p class="text-xs font-black text-slate-900 mb-1 uppercase tracking-tight">${escapeHtml(itemsStr)}</p>
+                            <p class="text-[9px] text-green-700 font-bold uppercase tracking-widest">${items.length} sản phẩm</p>
+                        </td>
+                        <td class="px-10 py-6 text-xs text-slate-400">${timeStr}</td>
+                        <td class="px-10 py-6 text-right font-black text-slate-900 text-lg tracking-tighter tabular-nums">${Number(order.total || 0).toLocaleString('vi-VN')}đ</td>
+                        <td class="px-10 py-6 text-center">
+                            <span class="px-5 py-2 border rounded-full text-[9px] font-black uppercase tracking-widest ${statusClass}">${statusLabel}</span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            updateStats(filtered.length, totalRev);
+        }
+
+        function updateStats(count, rev) {
+            document.getElementById('statCount').innerText = count;
+            document.getElementById('statRevenue').innerText = rev.toLocaleString('vi-VN');
+        }
+
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+        }
+    </script>
+</body>
+</html>

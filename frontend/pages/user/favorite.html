@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshFood - Yêu Thích</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,200..700,0..1,-50..200">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        .smooth-transition { transition: all 0.3s ease-in-out; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .nav-link { position: relative; }
+        .nav-link.active { color: #15803d; }
+        .nav-link.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: #15803d; }
+        html { scroll-behavior: smooth; }
+        .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'wght' 200;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .category-btn.active { background-color: #16a34a; color: white; border-color: #16a34a; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased h-[100dvh] flex flex-col overflow-hidden">
+
+<div class="flex-1 flex flex-col overflow-y-auto bg-slate-50 relative min-h-0">
+    
+    <!-- Top Bar -->
+    <div class="bg-green-700 text-white text-xs py-2">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
+            <div class="flex gap-4 sm:gap-6 font-medium">
+                <a href="policy.html" class="hover:text-green-200 transition">Chính sách giao hàng</a>
+                <a href="guide.html" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div id="auth-section-guest" class="flex gap-3">
+                    <a href="register.html" class="hover:text-green-200 transition">Đăng ký</a>
+                    <span class="text-green-500">|</span>
+                    <a href="login.html" class="hover:text-green-200 transition font-bold">Đăng nhập</a>
+                </div>
+                <div id="auth-section-user" class="hidden flex items-center gap-3 relative">
+                    <button onclick="toggleAccountMenu()" class="flex items-center gap-2 hover:text-green-200 transition focus:outline-none">
+                        <span class="material-symbols-outlined text-green-200 text-xl">person</span>
+                        <span id="header-username" class="font-bold"></span>
+                    </button>
+                    <!-- Account Dropdown -->
+                    <div id="account-dropdown" class="hidden absolute top-8 right-0 w-72 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden transform origin-top-right transition-all">
+                        <div class="p-4 bg-green-50 border-b border-green-100 text-center">
+                            <span class="material-symbols-outlined text-green-700 text-4xl block mb-2">account_circle</span>
+                            <div class="font-black text-green-800" id="dropdown-name">Họ Tên</div>
+                            <div class="text-[10px] text-green-600 uppercase font-bold tracking-widest" id="dropdown-role">Khách hàng</div>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <a href="settings.html" class="w-full text-left px-4 py-2 hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-lg transition flex items-center gap-2">
+                                <span>✏️</span> Chỉnh sửa thông tin
+                            </a>
+                            <button onclick="logoutConfirm()" class="w-full text-left px-4 py-2 hover:bg-red-50 text-sm font-bold text-red-600 rounded-lg transition flex items-center gap-2">
+                                <span class="material-symbols-outlined text-lg">logout</span> Đăng xuất
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-3 transition hover:opacity-90 shrink-0">
+                    <div class="w-10 h-10 bg-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-200">
+                        <span class="material-symbols-outlined text-white text-2xl">eco</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-bold text-slate-800 leading-none">FreshFood</span>
+                        <span class="text-[10px] text-green-600 font-bold uppercase tracking-widest mt-1">Organic Market</span>
+                    </div>
+                </a>
+                
+                <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
+                    <input type="text" id="header-search" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition font-medium" onkeydown="if(event.key==='Enter') typeof goSearch === 'function' ? goSearch() : window.location.href='products.html?search='+encodeURIComponent(this.value.trim())">
+                    <button onclick="const q = document.getElementById('header-search').value.trim(); if(q) { if(typeof goSearch === 'function') goSearch(); else window.location.href='products.html?search='+encodeURIComponent(q); }" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 transition">
+                        <span class="material-symbols-outlined text-xl !font-normal">search</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center space-x-6 shrink-0">
+                    <a href="orders.html" class="flex items-center gap-2 text-slate-600 hover:text-green-700 transition font-medium text-sm">
+                        <span class="material-symbols-outlined text-2xl">receipt_long</span>
+                        <span class="hidden sm:inline font-bold">Đơn hàng</span>
+                    </a>
+                    <a href="cart.html" class="relative group flex items-center gap-2">
+                        <span class="material-symbols-outlined text-2xl group-hover:text-green-600 transition">shopping_cart</span>
+                        <span id="header-cart-count" class="hidden absolute -top-1 -right-2 bg-green-600 text-white text-[10px] font-black w-5 h-5 rounded-full items-center justify-center border-2 border-white">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="bg-white mt-4 hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 flex justify-center space-x-12 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <a href="index.html" class="nav-link hover:text-green-700 transition pb-3">Trang Chủ</a>
+                <a href="products.html" class="nav-link hover:text-green-700 transition pb-3">Sản Phẩm</a>
+                <a href="explore.html" class="nav-link hover:text-green-700 transition pb-3">Khám Phá</a>
+                <a href="coupons.html" class="nav-link hover:text-green-700 transition pb-3">Khuyến Mãi</a>
+                <a href="favorite.html" class="nav-link active hover:text-green-700 transition pb-3">Yêu Thích</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 pb-24 max-w-7xl w-full mx-auto px-4 py-12 fade-in-up flex flex-col">
+        <div class="flex flex-col md:flex-row justify-between md:items-end mb-8 gap-4 border-b border-slate-200 pb-4">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-900 tracking-tight mb-2">Sản phẩm yêu thích</h1>
+                <p class="text-slate-500 font-medium">Lưu trữ những nguồn cảm hứng dinh dưỡng của bạn</p>
+            </div>
+            
+            <!-- Category Filters -->
+            <div id="filter-container" class="hidden flex gap-2 overflow-x-auto hide-scroll pb-2">
+                <button onclick="filterFav('all')" class="category-btn active px-4 py-2 border border-slate-200 bg-white text-slate-600 rounded-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap transition cursor-pointer">Tất Cả</button>
+                <button onclick="filterFav('Rau củ quả')" class="category-btn px-4 py-2 border border-slate-200 bg-white text-slate-600 rounded-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap transition cursor-pointer">Rau Củ Quả</button>
+                <button onclick="filterFav('Thịt các loại')" class="category-btn px-4 py-2 border border-slate-200 bg-white text-slate-600 rounded-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap transition cursor-pointer">Thịt các loại</button>
+                <button onclick="filterFav('Thủy hải sản')" class="category-btn px-4 py-2 border border-slate-200 bg-white text-slate-600 rounded-xl text-xs font-bold uppercase tracking-widest whitespace-nowrap transition cursor-pointer">Thủy hải sản</button>
+            </div>
+        </div>
+
+        <!-- Trạng thái Trống (Chưa có SP hoặc Chưa Đăng Nhập) -->
+        <div id="empty-state" class="flex-1 flex flex-col items-center justify-center text-center py-20">
+            <span class="material-symbols-outlined text-7xl mb-6 text-slate-200">heart_broken</span>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Căn phòng trống vắng</h2>
+            <p class="text-slate-500 mb-8 max-w-md" id="empty-state-msg">Vui lòng đăng nhập để lưu trữ những sản phẩm yêu thích của bạn.</p>
+            <button id="empty-state-btn" onclick="window.location.href='login.html'" class="bg-green-600 text-white font-bold px-8 py-3.5 rounded-full text-sm hover:bg-green-500 transition shadow-lg shadow-green-100">Đăng nhập ngay</button>
+        </div>
+
+        <!-- Grid Yêu thích -->
+        <div id="fav-grid" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Render JS -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 pt-12 pb-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-4">
+                <div class="col-span-1 lg:col-span-1">
+                    <a href="../index.html" class="flex items-center gap-3 mb-4">
+                        <div class="w-9 h-9 bg-green-700 rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white text-xl">eco</span>
+                        </div>
+                        <span class="text-xl font-bold text-slate-800">FreshFood</span>
+                    </a>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                        FreshFood - Hệ thống cung cấp thực phẩm hữu cơ, rau củ sạch đạt chuẩn VietGAP & GlobalGAP. Sức
+                        khỏe của bạn là niềm hạnh phúc của chúng tôi.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">MUA SẮM</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-slate-500 hover:text-green-600 transition">Tất cả sản phẩm</a></li>
+                        <li><a href="products.html?category=fruits" class="text-slate-500 hover:text-green-600 transition">Trái cây tươi</a></li>
+                        <li><a href="products.html?category=vegetables" class="text-slate-500 hover:text-green-600 transition">Rau củ hữu cơ</a></li>
+                        <li><a href="explore.html" class="text-slate-500 hover:text-green-600 transition">Combo khuyến mãi</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">CHÍNH SÁCH</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Chính sách vận chuyển</a></li>
+                        <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Chính sách đổi trả</a></li>
+                        <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Bảo mật thông tin</a></li>
+                        <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Điều khoản sử dụng</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">LIÊN HỆ</h4>
+                    <ul class="space-y-2">
+                        <li class="flex gap-3">
+                            <span class="material-symbols-outlined text-green-600 text-lg">location_on</span>
+                            <span class="text-slate-500 text-[13px]">123 Đường Organic, Quận 1, TP. HCM</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="material-symbols-outlined text-green-600 text-lg">call</span>
+                            <span class="text-slate-500 text-[13px]">1900 1234 - 0987 654 321</span>
+                        </li>
+                        <li class="flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-green-600 text-lg">mail</span>
+                                <span class="text-slate-500 text-[13px]">support@freshfood.vn</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <a href="#" class="w-7 h-7 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:border-green-500 hover:text-green-500 transition">
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.77,7.46H14.5v-1.9c0-.9.6-1.1,1-1.1h3V1h-4.33c-4.78,0-5.37,3.52-5.37,5.48v2.12H5.09v3.74h3.71v11.66h4.51V11.2h3.3l1.16-3.74Z"></path></svg>
+                                </a>
+                                <a href="#" class="w-7 h-7 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:border-green-500 hover:text-green-500 transition">
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.31,2h-1c-2,0-3.35,0-4.42.08C5.8,2.17,5,2.32,4.3,2.7A4.6,4.6,0,0,0,2.7,4.3C2.32,5,2.17,5.8,2.08,6.86,2,7.93,2,9.28,2,11.31v1c0,2,0,3.35.08,4.42.09,1.07.24,1.82.62,2.51a4.6,4.6,0,0,0,1.6,1.6c.69.38,1.44.53,2.51.62,1.07.08,2.42.08,4.42.08h1c2,0,3.35,0,4.42-.08,1.07-.09,1.82-.24,2.51-.62a4.6,4.6,0,0,0,1.6-1.6c.38-.69.53-1.44.62-2.51.08-1.07.08-2.42.08-4.42v-1c0-2,0-3.35-.08-4.42-.09-1.07-.24-1.82-.62-2.51a4.6,4.6,0,0,0-1.6-1.6c-.69-.38-1.44-.53-2.51-.62C15.66,2,14.31,2,12.31,2ZM12,6.87A5.13,5.13,0,1,1,6.87,12,5.13,5.13,0,0,1,12,6.87Zm6.39-1.11a1.2,1.2,0,1,1-1.2-1.2A1.2,1.2,0,0,1,18.39,5.76ZM12,15.13A3.13,3.13,0,1,0,8.87,12,3.13,3.13,0,0,0,12,15.13Z"></path></svg>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- Logout Confirm Modal -->
+<div id="logout-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] items-center justify-center">
+    <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-300" id="logout-modal-content">
+        <h3 class="text-2xl font-black text-slate-800 mb-2">Đăng xuất?</h3>
+        <p class="text-slate-500 font-medium mb-8">Bạn có chắc chắn muốn đăng xuất khỏi tài khoản hiện tại không?</p>
+        <div class="flex gap-3">
+            <button onclick="closeLogoutModal()" class="flex-1 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 uppercase tracking-widest text-xs transition">Hủy bỏ</button>
+            <button onclick="confirmLogout()" class="flex-1 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-black uppercase tracking-widest text-xs transition shadow-lg">Có, Đăng xuất</button>
+        </div>
+    </div>
+</div>
+
+<!-- Mới: Modal Chi tiết Sản phẩm -->
+<div id="product-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[120] items-center justify-center overflow-y-auto">
+    <div class="bg-white rounded-[2rem] w-full max-w-4xl mx-4 my-8 shadow-2xl relative flex flex-col md:flex-row overflow-hidden transform scale-95 transition-transform duration-300" id="product-modal-content">
+        <button onclick="closeProductModal()" class="absolute top-4 right-4 w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition z-10 font-bold text-xl leading-none">&times;</button>
+        <div class="md:w-1/2 min-h-[300px] bg-slate-50 p-6 flex items-center justify-center relative">
+            <img id="modal-img" src="" class="w-full h-full object-contain drop-shadow-xl max-h-[400px]">
+        </div>
+        <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+            <div class="text-[10px] text-green-600 font-black tracking-widest uppercase mb-2" id="modal-category">Danh mục</div>
+            <h2 class="text-3xl font-black text-slate-800 mb-4 leading-tight" id="modal-name">Tên sản phẩm</h2>
+            <div class="flex items-center gap-4 mb-6 pb-6 border-b border-slate-100">
+                <span class="text-3xl font-black text-green-600 tracking-tighter" id="modal-price">0đ</span>
+            </div>
+            <div class="flex items-center gap-3 mt-auto pt-4">
+                <button id="modal-btn-buy" class="flex-1 bg-green-600 text-white font-black py-4 rounded-2xl hover:bg-green-500 transition shadow-[0_4px_14px_0_rgba(22,163,74,0.39)] uppercase tracking-widest text-xs">Thêm vào giỏ</button>
+                <button id="modal-btn-remove" class="w-16 h-[52px] bg-slate-100 text-slate-500 rounded-2xl flex items-center justify-center hover:bg-red-500 hover:text-white transition relative">
+                    <span class="text-xl h-full flex items-center justify-center relative top-[-1px]">🗑️</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Nav -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-40 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex justify-around items-center py-3 pb-safe">
+    <a href="index.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-xl">🏠</span>
+    </a>
+    <a href="explore.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="text-xl">📰</span>
+    </a>
+    <a href="favorite.html" class="flex flex-col items-center text-green-700 font-bold">
+        <span class="text-xl">❤️</span>
+    </a>
+</nav>
+
+<div id="toast-container" class="fixed top-20 right-4 md:top-24 md:right-8 z-[150] flex flex-col gap-2 pointer-events-none"></div>
+
+<script>
+    let rawFavorites = [];
+    let currentCategory = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        checkAuth();
+        fetchFakeFavorites();
+    });
+
+    // --- Authentication ---
+    function checkAuth() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const userStr = localStorage.getItem('currentUser');
+        const emptyState = document.getElementById('empty-state');
+        const favGrid = document.getElementById('fav-grid');
+        const filterContainer = document.getElementById('filter-container');
+
+        if (isLoggedIn && userStr) {
+            const user = JSON.parse(userStr);
+            document.getElementById('header-username').innerText = user.displayName;
+            document.getElementById('dropdown-name').innerText = user.displayName;
+            document.getElementById('dropdown-role').innerText = user.role || 'Thành viên';
+            document.getElementById('auth-section-guest').classList.add('hidden');
+            document.getElementById('auth-section-user').classList.remove('hidden');
+            
+            // Allow showing favorites
+            emptyState.classList.add('hidden');
+            favGrid.classList.remove('hidden');
+            filterContainer.classList.remove('hidden');
+            filterContainer.classList.add('flex');
+        } else {
+            document.getElementById('auth-section-guest').classList.remove('hidden');
+            document.getElementById('auth-section-user').classList.add('hidden');
+            
+            // Show restrict block
+            emptyState.classList.remove('hidden');
+            favGrid.classList.add('hidden');
+            filterContainer.classList.add('hidden');
+            filterContainer.classList.remove('flex');
+        }
+        updateCartBadges(); 
+    }
+
+    // Sản phẩm mặc định khi API offline
+    const DEFAULT_FAVORITES = [
+        { _id: 'df1', name: 'Cải Chíp Thủy Canh Hữu Cơ', category: 'rau', price: 35000, unit: '500g', image: 'https://images.unsplash.com/photo-1557844352-761f2565b576?w=400&q=80' },
+        { _id: 'df2', name: 'Thịt Lợn Sinh Học Omega-3', category: 'thit', price: 120000, unit: '1kg', image: 'https://images.unsplash.com/photo-1607623814075-e512199b4482?w=400&q=80' },
+        { _id: 'df3', name: 'Cà Chua Bi Hữu Cơ', category: 'rau', price: 45000, unit: '300g', image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&q=80' },
+        { _id: 'df4', name: 'Rau Bina Baby Organic', category: 'rau', price: 28000, unit: '200g', image: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&q=80' },
+        { _id: 'df5', name: 'Trứng Gà Ta Thả Vườn', category: 'thit', price: 55000, unit: '10 quả', image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400&q=80' },
+        { _id: 'df6', name: 'Nấm Hương Tươi Sạch', category: 'rau', price: 38000, unit: '300g', image: 'https://images.unsplash.com/photo-1504545102780-26774c1bb073?w=400&q=80' }
+    ];
+
+    function getFavKey() {
+        const userStr = localStorage.getItem('currentUser');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            return 'favorites_' + (user.id || user._id || user.username);
+        }
+        return 'favorites';
+    }
+
+    async function fetchFakeFavorites() {
+        if (localStorage.getItem('isLoggedIn') !== 'true') return;
+
+        // Đọc favorites từ localStorage trước theo User
+        const savedFavIds = JSON.parse(localStorage.getItem(getFavKey()) || '[]');
+
+        // Nếu user chưa có sản phẩm yêu thích nào → hiển thị empty state
+        if (savedFavIds.length === 0) {
+            rawFavorites = [];
+            renderGrid(rawFavorites);
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/api/products');
+            if (response.ok) {
+                const data = await response.json();
+                rawFavorites = data.filter(p => savedFavIds.includes(String(p._id || p.id)));
+            } else {
+                throw new Error();
+            }
+        } catch (error) {
+            rawFavorites = DEFAULT_FAVORITES.filter(p => savedFavIds.includes(String(p._id)));
+        }
+        renderGrid(rawFavorites);
+    }
+
+    function toggleAccountMenu() {
+        document.getElementById('account-dropdown').classList.toggle('hidden');
+    }
+
+    function logoutConfirm() {
+        document.getElementById('account-dropdown').classList.add('hidden');
+        const modal = document.getElementById('logout-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => document.getElementById('logout-modal-content').classList.remove('scale-95'), 10);
+    }
+
+    function closeLogoutModal() {
+        document.getElementById('logout-modal-content').classList.add('scale-95');
+        setTimeout(() => {
+            const modal = document.getElementById('logout-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 200);
+    }
+
+    function confirmLogout() {
+        closeLogoutModal();
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
+        checkAuth(); // This will auto-hide the grid and show empty state
+        showToastDesign('Đăng xuất thành công');
+    }
+
+    function updateCartBadges() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const headerBadge = document.getElementById('header-cart-count');
+        if (!headerBadge) return;
+
+        if (!isLoggedIn) {
+            headerBadge.classList.add('hidden');
+            return;
+        }
+
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let total = 0;
+        cart.forEach(c => total += c.qty);
+
+        if (total > 0) {
+            headerBadge.innerText = total;
+            headerBadge.classList.remove('hidden');
+            headerBadge.classList.add('flex');
+        } else {
+            headerBadge.classList.remove('flex');
+            headerBadge.classList.add('hidden');
+        }
+    }
+
+    // --- Render Favorites ---
+
+    function getParentCategory(cat) {
+        const c = String(cat || '');
+        if (['Rau ăn lá', 'Củ & Quả', 'Nấm tươi', 'Trái cây'].includes(c)) return 'Rau củ quả';
+        if (['Thịt heo', 'Thịt bò', 'Gia cầm (gà, vịt)'].includes(c)) return 'Thịt các loại';
+        if (['Cá tươi', 'Tôm/Cua/Mực', 'Hải sản đông lạnh'].includes(c)) return 'Thủy hải sản';
+        const lowC = c.toLowerCase();
+        if (['rau', 'traicay', 'raucu', 'cuqua', 'nam', 'raucu'].includes(lowC)) return 'Rau củ quả';
+        if (['thit', 'thitheo', 'thitbo', 'giacam'].includes(lowC)) return 'Thịt các loại';
+        if (['thuyhai', 'hai', 'catuoi', 'tomcua', 'haisan'].includes(lowC)) return 'Thủy hải sản';
+        return 'Rau củ quả';
+    }
+
+    function filterFav(cat) {
+        currentCategory = cat;
+        const btns = document.querySelectorAll('.category-btn');
+        btns.forEach(b => {
+             b.classList.remove('active', 'bg-green-600', 'text-white', 'border-green-600');
+             b.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+        });
+        const activeBtn = Array.from(btns).find(b => b.onclick.toString().includes(`'${cat}'`));
+        if (activeBtn) {
+            activeBtn.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+            activeBtn.classList.add('bg-green-600', 'text-white', 'border-green-600');
+        }
+        
+        let filtered = currentCategory === 'all' ? [...rawFavorites] : rawFavorites.filter(p => getParentCategory(p.category) === currentCategory || p.category === currentCategory);
+        renderGrid(filtered);
+    }
+
+    function formatMoney(amount) {
+        return amount.toLocaleString('vi-VN') + 'đ';
+    }
+
+    function renderGrid(items) {
+        const grid = document.getElementById('fav-grid');
+        const emptyState = document.getElementById('empty-state');
+        const emptyMsg = document.getElementById('empty-state-msg');
+        const emptyBtn = document.getElementById('empty-state-btn');
+        
+        if (!items.length) {
+            grid.classList.add('hidden');
+            emptyState.classList.remove('hidden');
+            emptyMsg.innerText = "Chưa có sản phẩm yêu thích nào trong danh mục này.";
+            emptyBtn.innerText = "Về trang chủ";
+            emptyBtn.onclick = () => { window.location.href = 'index.html'; };
+            return;
+        }
+
+        emptyState.classList.add('hidden');
+        grid.classList.remove('hidden');
+        
+        grid.innerHTML = items.map(p => {
+            const idStr = p._id || p.id;
+            return `
+            <div class="bg-white rounded-[2rem] border border-slate-100 overflow-hidden hover:shadow-2xl hover:border-green-200 transition-all duration-300 relative group cursor-pointer" onclick="openProductModal('${idStr}')">
+                <div class="h-56 md:h-64 bg-slate-50 relative overflow-hidden flex items-center justify-center group-hover:bg-slate-100/50 transition-colors duration-500">
+                    <img src="${p.image}" class="w-full h-full object-cover transform group-hover:scale-[1.05] transition duration-700">
+                </div>
+                <div class="p-5 pt-2 flex flex-col justify-between h-[160px]">
+                    <div>
+                        <h3 class="font-black text-slate-800 text-base md:text-lg leading-tight mb-1 line-clamp-2">${p.name}</h3>
+                        <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2">${p.unit}</div>
+                    </div>
+                    <div class="flex justify-between items-center mt-auto pb-1">
+                        <div>
+                            <span class="text-xl font-black text-green-600 tracking-tighter">${formatMoney(p.price)}</span>
+                        </div>
+                        <button onclick="event.stopPropagation(); handleAddToCart(event, '${idStr}', false)" class="w-10 h-10 shrink-0 bg-green-500 text-white rounded-[1rem] flex items-center justify-center hover:bg-green-400 border border-transparent transition shadow-lg shadow-green-500/30">
+                            <span class="text-xl font-medium block leading-none relative top-[-1px]">+</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            `;
+        }).join('');
+    }
+
+    function removeFavorite(idStr) {
+        rawFavorites = rawFavorites.filter(p => (p._id || p.id) != idStr);
+        let savs = JSON.parse(localStorage.getItem(getFavKey()) || '[]');
+        savs = savs.filter(id => id != idStr);
+        localStorage.setItem(getFavKey(), JSON.stringify(savs));
+        filterFav(currentCategory);
+        closeProductModal();
+        showToastDesign('Đã xóa khỏi danh sách Yêu thích', '🗑️');
+    }
+
+    function openProductModal(idStr) {
+        const product = rawFavorites.find(p => (p._id || p.id) == idStr);
+        if(!product) return;
+        
+        document.getElementById('modal-name').innerText = product.name;
+        document.getElementById('modal-price').innerText = formatMoney(product.price);
+        document.getElementById('modal-img').src = product.image;
+        document.getElementById('modal-category').innerText = getParentCategory(product.category);
+        
+        // Cập nhật sự kiện nút
+        const btnBuy = document.getElementById('modal-btn-buy');
+        const btnRm = document.getElementById('modal-btn-remove');
+        
+        btnBuy.onclick = (e) => { handleAddToCart(e, idStr, false); closeProductModal(); };
+        btnRm.onclick = (e) => { removeFavorite(idStr); };
+
+        const modal = document.getElementById('product-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => document.getElementById('product-modal-content').classList.remove('scale-95'), 10);
+    }
+
+    function closeProductModal() {
+        document.getElementById('product-modal-content').classList.add('scale-95');
+        setTimeout(() => {
+            const modal = document.getElementById('product-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 200);
+    }
+
+    function handleAddToCart(event, productId, isBuyNow) {
+        event.preventDefault();
+        const product = rawFavorites.find(p => (p._id || p.id) == productId);
+        if(!product) return;
+        
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const existing = cart.find(i => (i._id || i.id) == productId);
+        
+        if (existing) existing.qty += 1;
+        else cart.push({ ...product, qty: 1, selected: true });
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartBadges();
+        showToastDesign(`Đã thêm vào giỏ`, '✅');
+    }
+
+    function showToastDesign(message, iconStr = '') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `transform translate-x-10 opacity-0 smooth-transition px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 font-bold text-sm text-slate-800 bg-white border border-slate-100 pointer-events-auto z-[200]`;
+        toast.innerHTML = `${iconStr ? `<span class="text-xl">${iconStr}</span>` : ''} <span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+        setTimeout(() => { toast.classList.add('translate-x-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 2500);
+    }
+</script>
+</body>
+</html>

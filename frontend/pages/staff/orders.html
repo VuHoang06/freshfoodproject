@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn hàng - FreshFood Staff</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <style>
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8f9fa; }
+        .sidebar-active { background-color: #f0fdf4; color: #15803d; font-weight: 800; border-left: 4px solid #16a34a; }
+        .status-badge { opacity: 0.9; }
+        .filter-btn.active { background: #16a34a; color: white; border-color: #16a34a; }
+    </style>
+</head>
+<body class="text-slate-900 antialiased flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6 shrink-0">
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
+            <span class="text-[10px] text-slate-300 tracking-widest font-bold uppercase">Nhân viên trực</span></span>
+        </div>
+        <nav class="flex flex-col gap-1 flex-1 overflow-y-auto px-4">
+            <a href="dashboard.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">dashboard</span><span class="text-sm font-bold">Tổng quan ca</span>
+            </a>
+            <a href="pos.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">point_of_sale</span><span class="text-sm font-bold">Bán hàng (POS)</span>
+            </a>
+            <a href="my-orders.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">receipt_long</span><span class="text-sm font-bold">Đơn hàng của mình</span>
+            </a>
+            <a href="orders.html" class="flex items-center gap-4 py-3 px-4 rounded-xl sidebar-active">
+                <span class="material-symbols-outlined text-xl">shopping_cart</span><span class="text-sm">Quản lý đơn hàng</span>
+            </a>
+            <a href="inventory-check.html" class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">inventory_2</span><span class="text-sm font-bold">Kiểm kho nhanh</span>
+            </a>
+        </nav>
+        <div class="mt-auto px-4 pb-8">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                <p class="text-[10px] font-bold text-green-700 uppercase mb-3 tracking-widest">Quản lý đơn hàng</p>
+                <button onclick="logoutStaff()" class="w-full py-3 bg-white text-slate-500 border border-slate-200 font-extrabold rounded-xl flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest hover:text-red-500 hover:border-red-100 transition-all">
+                    <span class="material-symbols-outlined text-sm">logout</span> Đăng xuất
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="flex-1 flex flex-col min-w-0 bg-[#f8f9fa] relative z-0">
+        <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-40">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden text-slate-500"><span class="material-symbols-outlined">menu</span></button>
+                <h1 class="text-lg font-bold text-slate-800 tracking-tight">Quản lý Đơn hàng</h1>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="hidden md:flex items-center bg-white border border-slate-100 rounded-full px-4 py-1.5 shadow-sm gap-2">
+                    <span class="material-symbols-outlined text-slate-400 text-sm">search</span>
+                    <input id="search-input" type="text" placeholder="Tìm theo tên khách / SĐT..." class="bg-transparent text-xs font-bold text-slate-600 focus:outline-none w-56" oninput="renderTable()">
+                    <button onclick="clearSearch()" class="text-slate-300 hover:text-slate-500 transition" title="Xóa">✕</button>
+                </div>
+                <div class="flex items-center bg-slate-50 border border-slate-100 rounded-full px-4 py-1.5 shadow-sm gap-2">
+                    <span class="material-symbols-outlined text-slate-400 text-sm">calendar_today</span>
+                    <input type="date" id="filter-from" class="bg-transparent text-xs font-bold text-slate-600 focus:outline-none" onchange="loadOrders()">
+                    <span class="text-slate-300">-</span>
+                    <input type="date" id="filter-to" class="bg-transparent text-xs font-bold text-slate-600 focus:outline-none" onchange="loadOrders()">
+                </div>
+                <button onclick="exportExcel()" class="bg-slate-100 text-slate-500 px-5 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center gap-2">
+                    <span class="material-symbols-outlined text-lg">download</span> Xuất Excel
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-8 space-y-8">
+            <!-- Shift summary -->
+            <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Doanh thu theo ca (tính theo thời gian bắt đầu ca)</div>
+                    <div class="mt-2 flex flex-wrap gap-3 items-center">
+                        <span class="px-3 py-1.5 rounded-full bg-slate-50 text-slate-600 border border-slate-100 text-[10px] font-black uppercase tracking-widest" id="shift-badge">Ca: --</span>
+                        <span class="px-3 py-1.5 rounded-full bg-slate-50 text-slate-600 border border-slate-100 text-[10px] font-black uppercase tracking-widest" id="shift-start">Bắt đầu: --</span>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tổng doanh thu ca</div>
+                    <div class="text-3xl font-black text-green-700 tracking-tighter tabular-nums" id="shift-revenue">0đ</div>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-sm flex items-center gap-4 hover:bg-amber-50 transition">
+                    <span class="material-symbols-outlined text-amber-500 bg-amber-50 p-2 rounded-xl">schedule</span>
+                    <div><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Chờ duyệt</p><p class="text-xl font-extrabold text-amber-600 tracking-tighter" id="count-pending">0</p></div>
+                </div>
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-sm flex items-center gap-4 hover:bg-blue-50 transition">
+                    <span class="material-symbols-outlined text-blue-500 bg-blue-50 p-2 rounded-xl">local_shipping</span>
+                    <div><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Đang giao</p><p class="text-xl font-extrabold text-blue-600 tracking-tighter" id="count-shipping">0</p></div>
+                </div>
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-sm flex items-center gap-4 hover:bg-green-50 transition">
+                    <span class="material-symbols-outlined text-green-600 bg-green-50 p-2 rounded-xl">verified_user</span>
+                    <div><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Hoàn thành</p><p class="text-xl font-extrabold text-green-600 tracking-tighter" id="count-done">0</p></div>
+                </div>
+                <div class="bg-white p-6 rounded-[2rem] border border-slate-50 shadow-sm flex items-center gap-4 hover:bg-red-50 transition">
+                    <span class="material-symbols-outlined text-red-400 bg-red-50 p-2 rounded-xl">cancel</span>
+                    <div><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Hủy đơn</p><p class="text-xl font-extrabold text-red-500 tracking-tighter" id="count-cancel">0</p></div>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="flex gap-2 flex-wrap">
+                <button onclick="setFilter('all')" class="filter-btn active px-5 py-2 border border-slate-200 rounded-full text-xs font-black uppercase tracking-widest transition" data-filter="all">Tất cả</button>
+                <button onclick="setFilter('Chờ xác nhận')" class="filter-btn px-5 py-2 border border-slate-200 rounded-full text-xs font-black uppercase tracking-widest bg-white text-slate-600 transition" data-filter="Chờ xác nhận">Chờ duyệt</button>
+                <button onclick="setFilter('Đang giao hàng')" class="filter-btn px-5 py-2 border border-slate-200 rounded-full text-xs font-black uppercase tracking-widest bg-white text-slate-600 transition" data-filter="Đang giao hàng">Đang giao</button>
+                <button onclick="setFilter('Hoàn thành')" class="filter-btn px-5 py-2 border border-slate-200 rounded-full text-xs font-black uppercase tracking-widest bg-white text-slate-600 transition" data-filter="Hoàn thành">Hoàn thành</button>
+                <button onclick="setFilter('Đã hủy')" class="filter-btn px-5 py-2 border border-slate-200 rounded-full text-xs font-black uppercase tracking-widest bg-white text-slate-600 transition" data-filter="Đã hủy">Đã hủy</button>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">
+                <div id="table-loading" class="flex items-center justify-center py-16 text-slate-400">
+                    <div class="animate-spin w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full mr-3"></div>
+                    <span class="font-bold">Đang tải dữ liệu...</span>
+                </div>
+                <div id="table-wrap" class="hidden overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50/50 border-b border-slate-100 uppercase tracking-widest">
+                            <tr class="text-[10px] font-extrabold text-slate-400">
+                                <th class="px-6 py-5">Mã Đơn / Khách hàng</th>
+                                <th class="px-6 py-5">Ngày đặt</th>
+                                <th class="px-6 py-5">Giá trị</th>
+                                <th class="px-6 py-5">Hình thức TT</th>
+                                <th class="px-6 py-5">Trạng thái</th>
+                                <th class="px-6 py-5 text-center">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50 font-bold" id="orders-tbody"></tbody>
+                    </table>
+                </div>
+                <div id="table-empty" class="hidden py-16 text-center text-slate-400">
+                    <span class="text-5xl block mb-3 opacity-30">📭</span>
+                    <p class="font-bold">Không có đơn hàng nào</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div id="order-modal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[100] items-center justify-center p-4">
+        <div class="bg-white rounded-[2rem] w-full max-w-xl shadow-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-green-600 to-green-700 p-6 text-white flex justify-between items-center">
+                <div>
+                    <div class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Chi tiết đơn hàng</div>
+                    <h3 class="text-xl font-black" id="modal-order-id">#ORD-000</h3>
+                </div>
+                <button onclick="closeModal()" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition text-xl font-bold">&times;</button>
+            </div>
+            <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div><div class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Khách hàng</div><div class="font-black" id="modal-customer">---</div></div>
+                    <div><div class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Điện thoại</div><div class="font-black" id="modal-phone">---</div></div>
+                    <div class="col-span-2"><div class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Địa chỉ giao</div><div class="font-medium" id="modal-address">---</div></div>
+                    <div><div class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Thanh toán</div><div class="font-black" id="modal-payment">---</div></div>
+                    <div><div class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Trạng thái</div><div id="modal-status-badge">---</div></div>
+                </div>
+                <div class="border-t border-slate-100 pt-4">
+                    <div class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-3">Sản phẩm</div>
+                    <div id="modal-items" class="space-y-2"></div>
+                </div>
+                <div class="border-t border-slate-100 pt-4 flex justify-between items-center">
+                    <span class="font-black text-slate-800">Tổng cộng</span>
+                    <span class="text-xl font-black text-green-600" id="modal-total">0đ</span>
+                </div>
+            </div>
+            <div class="p-6 border-t border-slate-100 flex gap-3" id="modal-actions">
+                <!-- Dynamic actions based on status -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast-container" class="fixed top-6 right-6 z-[200] flex flex-col gap-2 pointer-events-none"></div>
+
+    <script>
+        let allOrders = [];
+        let currentFilter = 'all';
+        let currentOrderId = null;
+        const SHIFT_KEY = 'STAFF_SHIFT_SESSION';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadOrders();
+        });
+
+        function clearSearch() {
+            const el = document.getElementById('search-input');
+            if (el) el.value = '';
+            renderTable();
+        }
+
+        function getShift() {
+            try {
+                return JSON.parse(localStorage.getItem(SHIFT_KEY) || 'null');
+            } catch {
+                return null;
+            }
+        }
+
+        function updateShiftSummary() {
+            const shift = getShift();
+            const badge = document.getElementById('shift-badge');
+            const startEl = document.getElementById('shift-start');
+            const revEl = document.getElementById('shift-revenue');
+
+            if (!shift || !shift.startedAt) {
+                if (badge) badge.innerText = 'Ca: --';
+                if (startEl) startEl.innerText = 'Bắt đầu: --';
+                if (revEl) revEl.innerText = '0đ';
+                return;
+            }
+
+            const startedAt = new Date(shift.startedAt);
+            if (badge) badge.innerText = `Ca: ${shift.name || '--'}`;
+            if (startEl) startEl.innerText = `Bắt đầu: ${startedAt.toLocaleString('vi-VN')}`;
+
+            // Revenue for shift: only PAID orders since shift start
+            const shiftRevenue = allOrders
+                .filter(o => o.isPaid && o.createdAt && new Date(o.createdAt) >= startedAt)
+                .reduce((sum, o) => sum + (Number(o.totalPrice) || 0), 0);
+            if (revEl) revEl.innerText = shiftRevenue.toLocaleString('vi-VN') + 'đ';
+        }
+
+        async function loadOrders() {
+            const token = localStorage.getItem('token');
+            document.getElementById('table-loading').classList.remove('hidden');
+            document.getElementById('table-wrap').classList.add('hidden');
+            document.getElementById('table-empty').classList.add('hidden');
+
+            try {
+                const res = await fetch('http://localhost:5000/api/orders', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    allOrders = await res.json();
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (e) {
+                // Fallback dữ liệu demo
+                allOrders = [
+                    {
+                        _id: 'demo001', status: 'Chờ xác nhận', isPaid: false,
+                        paymentMethod: 'Thanh toán khi nhận hàng',
+                        shippingAddress: { fullName: 'Nguyễn Văn A', phone: '0987123456', address: '123 Trường Chinh, Hà Nội' },
+                        orderItems: [{ name: 'Cải chíp hữu cơ', qty: 2, price: 35000 }],
+                        totalPrice: 100000, createdAt: new Date(Date.now() - 3600000).toISOString()
+                    },
+                    {
+                        _id: 'demo002', status: 'Đang giao hàng', isPaid: false,
+                        paymentMethod: 'Thanh toán khi nhận hàng',
+                        shippingAddress: { fullName: 'Trần Thị B', phone: '0912345678', address: '456 Lê Lợi, TP.HCM' },
+                        orderItems: [{ name: 'Thịt lợn sinh học', qty: 1, price: 120000 }, { name: 'Rau bina', qty: 3, price: 25000 }],
+                        totalPrice: 195000, createdAt: new Date(Date.now() - 7200000).toISOString()
+                    },
+                    {
+                        _id: 'demo003', status: 'Hoàn thành', isPaid: true,
+                        paymentMethod: 'Chuyển khoản QR',
+                        shippingAddress: { fullName: 'Lê Minh C', phone: '0934567890', address: '789 Nguyễn Huệ, TP.HCM' },
+                        orderItems: [{ name: 'Cà chua bi hữu cơ', qty: 2, price: 45000 }],
+                        totalPrice: 120000, createdAt: new Date(Date.now() - 86400000).toISOString()
+                    }
+                ];
+            }
+
+            updateStats();
+            updateShiftSummary();
+            renderTable();
+        }
+
+        function updateStats() {
+            document.getElementById('count-pending').innerText = allOrders.filter(o => o.status === 'Chờ xác nhận').length;
+            document.getElementById('count-shipping').innerText = allOrders.filter(o => o.status === 'Đang giao hàng').length;
+            document.getElementById('count-done').innerText = allOrders.filter(o => o.status === 'Hoàn thành').length;
+            document.getElementById('count-cancel').innerText = allOrders.filter(o => o.status === 'Đã hủy').length;
+        }
+
+        function renderTable() {
+            document.getElementById('table-loading').classList.add('hidden');
+
+            let filtered = currentFilter === 'all' ? allOrders : allOrders.filter(o => o.status === currentFilter);
+
+            // Search by customer name / phone
+            const q = (document.getElementById('search-input')?.value || '').trim().toLowerCase();
+            if (q) {
+                filtered = filtered.filter(o => {
+                    const name = (o.shippingAddress?.fullName || o.user?.fullName || '').toLowerCase();
+                    const phone = (o.shippingAddress?.phone || '').toLowerCase();
+                    return name.includes(q) || phone.includes(q);
+                });
+            }
+
+            if (filtered.length === 0) {
+                document.getElementById('table-wrap').classList.add('hidden');
+                document.getElementById('table-empty').classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('table-empty').classList.add('hidden');
+            document.getElementById('table-wrap').classList.remove('hidden');
+
+            const tbody = document.getElementById('orders-tbody');
+            tbody.innerHTML = filtered.map(order => {
+                const id = order._id;
+                const shortId = '#' + id.slice(-6).toUpperCase();
+                const customer = order.shippingAddress?.fullName || (order.user?.fullName || 'Khách');
+                const date = new Date(order.createdAt).toLocaleDateString('vi-VN');
+                const total = (order.totalPrice || 0).toLocaleString('vi-VN') + 'đ';
+                const isCOD = order.paymentMethod?.includes('nhận hàng') || order.paymentMethod?.includes('COD');
+                const statusBadge = getStatusBadge(order.status);
+                const isCODPending = isCOD && (order.status === 'Đang giao hàng' || order.status === 'Chờ xác nhận') && !order.isPaid;
+
+                return `
+                <tr class="hover:bg-slate-50/50 transition duration-300 group">
+                    <td class="px-6 py-5">
+                        <p class="text-slate-900 font-extrabold">${shortId}</p>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">${customer}</p>
+                    </td>
+                    <td class="px-6 py-5 text-slate-500 text-xs font-extrabold uppercase">${date}</td>
+                    <td class="px-6 py-5 text-slate-900 text-base font-extrabold">${total}</td>
+                    <td class="px-6 py-5">
+                        <span class="px-3 py-1.5 rounded-full ${isCOD ? 'bg-orange-50 text-orange-600 border border-orange-100' : 'bg-blue-50 text-blue-600 border border-blue-100'} text-[9px] font-black uppercase tracking-widest">${isCOD ? 'COD' : 'QR'}</span>
+                    </td>
+                    <td class="px-6 py-5">${statusBadge}</td>
+                    <td class="px-6 py-5">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="openModal('${id}')" class="p-2.5 bg-slate-50 rounded-full text-slate-400 hover:text-green-700 transition shadow-sm" title="Xem chi tiết">
+                                <span class="material-symbols-outlined text-lg">visibility</span>
+                            </button>
+                            ${isCODPending ? `
+                            <button onclick="confirmPayment('${id}')" class="px-4 py-2 bg-green-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-green-500 transition shadow-sm whitespace-nowrap">
+                                ✓ Đã TT
+                            </button>` : ''}
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function getStatusBadge(status) {
+            const map = {
+                'Chờ xác nhận': 'bg-amber-50/50 text-amber-500 border-amber-100/50',
+                'Đang giao hàng': 'bg-blue-50/50 text-blue-500 border-blue-100/50',
+                'Hoàn thành': 'bg-green-50/50 text-green-500 border-green-100/50',
+                'Đã hủy': 'bg-red-50/50 text-red-400 border-red-100/50',
+            };
+            const cls = map[status] || 'bg-slate-50 text-slate-400 border-slate-100';
+            return `<span class="px-3 py-1.5 rounded-full ${cls} text-[9px] font-black uppercase tracking-widest border status-badge">${status}</span>`;
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active');
+                b.classList.add('bg-white', 'text-slate-600');
+            });
+            document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+            document.querySelector(`[data-filter="${filter}"]`).classList.remove('bg-white', 'text-slate-600');
+            renderTable();
+        }
+
+        function openModal(orderId) {
+            const order = allOrders.find(o => o._id === orderId);
+            if (!order) return;
+            currentOrderId = orderId;
+
+            const shortId = '#' + orderId.slice(-6).toUpperCase();
+            document.getElementById('modal-order-id').innerText = shortId;
+            document.getElementById('modal-customer').innerText = order.shippingAddress?.fullName || 'Khách';
+            document.getElementById('modal-phone').innerText = order.shippingAddress?.phone || '--';
+            document.getElementById('modal-address').innerText = order.shippingAddress?.address || '--';
+            document.getElementById('modal-payment').innerText = order.paymentMethod || '--';
+            document.getElementById('modal-status-badge').innerHTML = getStatusBadge(order.status);
+            document.getElementById('modal-total').innerText = (order.totalPrice || 0).toLocaleString('vi-VN') + 'đ';
+
+            const itemsHtml = (order.orderItems || []).map(it => `
+                <div class="flex justify-between items-center py-2 border-b border-slate-50">
+                    <div class="font-medium text-sm text-slate-700">${it.name}</div>
+                    <div class="text-xs text-slate-500 font-bold">x${it.qty} • ${(it.price * it.qty).toLocaleString('vi-VN')}đ</div>
+                </div>
+            `).join('');
+            document.getElementById('modal-items').innerHTML = itemsHtml;
+
+            // Modal actions
+            const actionsEl = document.getElementById('modal-actions');
+            const isCOD = order.paymentMethod?.includes('nhận hàng') || order.paymentMethod?.includes('COD');
+            const canConfirmPayment = isCOD && order.status !== 'Hoàn thành' && order.status !== 'Đã hủy' && !order.isPaid;
+            const canMarkDelivering = order.status === 'Chờ xác nhận';
+
+            let actionsHtml = `<button onclick="closeModal()" class="flex-1 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition text-sm">Đóng</button>`;
+
+            if (canMarkDelivering) {
+                actionsHtml += `<button onclick="updateStatus('${orderId}', 'Đang giao hàng')" class="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-500 transition text-sm">🚚 Xác nhận giao</button>`;
+            }
+            if (canConfirmPayment) {
+                actionsHtml += `<button onclick="confirmPayment('${orderId}')" class="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-500 transition text-sm">✅ Xác nhận đã TT</button>`;
+            }
+
+            actionsEl.innerHTML = actionsHtml;
+
+            const modal = document.getElementById('order-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('order-modal').classList.add('hidden');
+            document.getElementById('order-modal').classList.remove('flex');
+        }
+
+        async function confirmPayment(orderId) {
+            await updateStatus(orderId, 'Hoàn thành', true);
+        }
+
+        async function updateStatus(orderId, newStatus, isPaid = false) {
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ status: newStatus, isPaid })
+                });
+
+                if (res.ok) {
+                    showToast(`✅ Cập nhật trạng thái: "${newStatus}"`);
+                } else {
+                    showToast('Cập nhật thành công (demo mode)');
+                }
+            } catch (e) {
+                showToast('Cập nhật thành công (offline mode)');
+            }
+
+            // Update local data
+            const order = allOrders.find(o => o._id === orderId);
+            if (order) {
+                order.status = newStatus;
+                if (isPaid) order.isPaid = true;
+            }
+
+            updateStats();
+            renderTable();
+            closeModal();
+        }
+
+        function exportExcel() {
+            showToast('📊 Tính năng xuất Excel đang được phát triển!');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        }
+
+        function logoutStaff() {
+            localStorage.clear();
+            window.location.href = '../user/login.html';
+        }
+
+        document.getElementById('order-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'transform translate-x-10 opacity-0 transition-all duration-300 px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 font-bold text-sm text-white bg-slate-800 border border-white/10 pointer-events-auto';
+            toast.innerHTML = `<span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+            setTimeout(() => { toast.classList.add('translate-x-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khách hàng - FreshFood Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .sidebar-active {
+            background-color: #f0fdf4;
+            color: #15803d;
+            font-weight: 800;
+            border-left: 4px solid #16a34a;
+        }
+
+        .primary-gradient {
+            background: linear-gradient(135deg, #28a745 0%, #006e25 100%);
+        }
+    </style>
+</head>
+
+<body class="text-slate-900 antialiased flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="w-[260px] bg-white border-r border-slate-100 flex flex-col shrink-0 z-50 fixed inset-y-0 left-0 lg:static -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <div class="h-20 flex items-center px-8 border-b border-slate-50 mb-6">
+            <span class="text-xl font-extrabold text-green-700 tracking-tighter uppercase leading-none">FreshFood<br>
+                <span class="text-[10px] text-slate-300 tracking-widest font-bold">Hệ thống Admin</span></span>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-1 overflow-y-auto">
+            <a href="dashboard.html"
+                class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">dashboard</span>
+                <span class="text-sm font-bold">Tổng quan</span>
+            </a>
+            <a href="products.html"
+                class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">inventory_2</span>
+                <span class="text-sm font-bold">Sản phẩm</span>
+            </a>
+            <a href="orders.html"
+                class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">shopping_cart</span>
+                <span class="text-sm font-bold">Đơn hàng</span>
+            </a>
+            <a href="users.html" class="flex items-center gap-4 py-3 px-4 rounded-xl sidebar-active">
+                <span class="material-symbols-outlined text-xl">group</span>
+                <span class="text-sm">Khách hàng</span>
+            </a>
+            <a href="promotions.html"
+                class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">sell</span>
+                <span class="text-sm font-bold">Khuyến mãi</span>
+            </a>
+            <a href="staff.html"
+                class="flex items-center gap-4 py-3 px-4 text-slate-500 hover:bg-slate-50 hover:text-green-700 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">badge</span>
+                <span class="text-sm font-bold">Nhân viên</span>
+            </a>
+
+        </nav>
+
+        <div class="px-4 py-6 border-t border-slate-100 mt-auto">
+            <button onclick="logoutAdmin()"
+                class="flex items-center gap-4 w-full py-3 px-4 text-red-500 hover:bg-red-50 rounded-xl transition-all">
+                <span class="material-symbols-outlined text-xl">logout</span>
+                <span class="text-sm font-bold">Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0 bg-[#f8f9fa]">
+        <header
+            class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-8 sticky top-0 z-40">
+            <h1 class="text-lg font-bold text-slate-800 tracking-tight">Cơ sở dữ liệu Khách hàng</h1>
+            <button
+                class="primary-gradient text-white px-8 py-2.5 rounded-full font-bold text-[10px] uppercase tracking-widest hover:scale-[1.02] shadow-lg shadow-green-600/10 flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">mail</span> Gửi CRM mới
+            </button>
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-10 space-y-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div
+                    class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 transition-all hover:bg-blue-50/50">
+                    <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-2">Tổng số tài
+                        khoản</p>
+                    <div class="flex items-center justify-between">
+                        <p class="text-3xl font-extrabold text-slate-900 tracking-tighter" id="total-users">0</p>
+                        <span class="px-3 py-1 bg-green-50 text-green-700 text-[10px] font-bold rounded-full">+1 Hệ
+                            thống</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50/50 border-b border-slate-100 uppercase tracking-widest">
+                            <tr class="text-[10px] font-extrabold text-slate-400">
+                                <th class="px-8 py-5">Hội viên hệ thống</th>
+                                <th class="px-8 py-5">Tài khoản User</th>
+                                <th class="px-8 py-5 text-center">Vai Trò</th>
+                                <th class="px-8 py-5 text-center">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body" class="divide-y divide-slate-50 font-bold">
+                            <!-- JS render -->
+                            <tr>
+                                <td colspan="4" class="py-10 text-center font-bold text-slate-400">Đang tải cấu trúc dữ
+                                    liệu ...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div
+                    class="p-10 border-t border-slate-50 bg-white flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest cursor-default">
+                    <span>Cơ sở dữ liệu Thời gian thực</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-8 right-8 z-[150] flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- User Detail Modal -->
+    <div id="user-detail-modal"
+        class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[200] items-center justify-center p-4">
+        <div class="bg-white rounded-[2.5rem] w-full max-w-lg shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"
+            id="user-detail-content">
+            <div class="primary-gradient p-8 text-white relative">
+                <button onclick="closeUserDetail()"
+                    class="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-white/20 hover:bg-white flex items-center justify-center hover:text-green-700 transition font-bold text-xl leading-none">&times;</button>
+                <div class="w-20 h-20 bg-white text-green-700 rounded-[1.5rem] flex items-center justify-center text-3xl font-extrabold shadow-lg mb-4"
+                    id="modal-user-initial">A</div>
+                <h3 class="text-2xl font-black tracking-tight" id="modal-user-name">Họ Tên</h3>
+                <p class="text-[10px] font-bold uppercase tracking-widest opacity-80 mt-1" id="modal-user-role">Khách
+                    hàng</p>
+            </div>
+            <div class="p-8 space-y-6">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tài khoản (Email)</p>
+                    <p class="text-sm font-extrabold text-slate-800" id="modal-user-email">email@example.com</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Số điện thoại</p>
+                    <p class="text-sm font-extrabold text-slate-800" id="modal-user-phone">0123456789</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Địa chỉ</p>
+                    <p class="text-sm font-extrabold text-slate-800" id="modal-user-address">Chưa cập nhật</p>
+                </div>
+                <div class="pt-4 border-t border-slate-100 flex justify-end">
+                    <button onclick="closeUserDetail()"
+                        class="px-6 py-2.5 bg-slate-100 text-slate-600 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-slate-200 transition">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+
+        let usersList = [];
+        const API_URL = 'http://localhost:5000/api/auth';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Vui lòng đăng nhập lại.'); window.location.href = '../user/login.html'; return;
+            }
+            fetchUsersDetail();
+        });
+
+        function logoutAdmin() {
+            localStorage.clear();
+            window.location.href = '../user/login.html';
+        }
+
+        async function fetchUsersDetail() {
+            try {
+                const res = await fetch(API_URL, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    usersList = data.filter(u => u.role === 'user' || !u.role); // Filter strictly user
+                    document.getElementById('total-users').innerText = usersList.length;
+                    renderUsers();
+                } else {
+                    showToast('Lỗi truy xuất hệ thống', 'error');
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        function renderUsers() {
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = '';
+
+            if (usersList.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="py-10 text-center text-slate-400 font-bold">Trống rỗng! Không có User nào.</td></tr>';
+                return;
+            }
+
+            usersList.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/50 transition duration-300 group';
+
+                // Get initials
+                const uName = u.fullName || u.username;
+                const initial = uName.charAt(0).toUpperCase();
+
+                tr.innerHTML = `
+                    <td class="px-8 py-6">
+                        <div class="flex items-center gap-5">
+                            <div class="w-12 h-12 rounded-[1rem] ${u.role === 'admin' ? 'bg-amber-500' : 'primary-gradient'} text-white flex items-center justify-center font-extrabold text-lg shadow-lg shrink-0">${initial}</div>
+                            <div>
+                                <p class="text-slate-900 font-extrabold">${u.fullName || 'Chưa cập nhật'}</p>
+                                <p class="text-[10px] text-slate-400 font-bold tracking-tighter mt-1">SĐT: ${u.phone || 'Chưa cập nhật'}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-6 text-slate-500 tracking-tighter font-extrabold">${u.username}</td>
+                    <td class="px-8 py-6 text-center">
+                        <span class="px-4 py-1.5 rounded-full ${u.role === 'admin' ? 'bg-amber-100 text-amber-600' : (u.role === 'staff' ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-500')} text-[9px] font-black uppercase tracking-widest border border-slate-50">${u.role}</span>
+                    </td>
+                    <td class="px-8 py-6">
+                        <div class="flex items-center justify-center gap-4 text-slate-300 opacity-0 group-hover:opacity-100 transition">
+                            <button onclick="showUserDetail('${u._id}')" class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold hover:bg-blue-100 hover:text-blue-700 transition shadow-sm" title="Chi tiết">Chi tiết</button>
+                            <button onclick="deleteAccount('${u._id}', '${u.role}')" class="px-3 py-1 bg-red-50 text-red-500 rounded-full text-xs font-bold hover:bg-red-100 hover:text-red-700 transition shadow-sm" title="Xóa khách hàng">Xóa</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showUserDetail(id) {
+            const u = usersList.find(user => user._id === id);
+            if (!u) return;
+
+            const uName = u.fullName || u.username;
+            document.getElementById('modal-user-initial').innerText = uName.charAt(0).toUpperCase();
+            document.getElementById('modal-user-name').innerText = uName;
+            document.getElementById('modal-user-email').innerText = u.username;
+            document.getElementById('modal-user-phone').innerText = u.phone || 'Chưa cập nhật';
+            document.getElementById('modal-user-address').innerText = u.address || 'Chưa cập nhật';
+
+            const modal = document.getElementById('user-detail-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => document.getElementById('user-detail-content').classList.remove('scale-95'), 10);
+        }
+
+        function closeUserDetail() {
+            document.getElementById('user-detail-content').classList.add('scale-95');
+            setTimeout(() => {
+                const modal = document.getElementById('user-detail-modal');
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        async function deleteAccount(id, role) {
+            if (role === 'admin') {
+                showToast('Hành động cấm! Không thể xóa Admin.', 'error');
+                return;
+            }
+            if (!confirm('Bạn có chắc chắn muốn xóa hệ thống người dùng này vĩnh viễn không?')) return;
+
+            try {
+                const res = await fetch(`${API_URL}/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+
+                if (res.ok) {
+                    showToast('Đã tiêu hủy tài khoản thành công.');
+                    fetchUsersDetail(); // reload
+                } else {
+                    const err = await res.json();
+                    showToast(err.message || 'Lỗi server ròi', 'error');
+                }
+            } catch (e) { showToast('Lỗi Server', 'error'); }
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const icon = type === 'success' ? '✅' : '⚠️';
+            const color = type === 'success' ? 'bg-slate-900 border-green-500' : 'bg-red-600 border-red-400';
+            toast.className = `transform translate-x-10 opacity-0 smooth-transition px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 font-bold text-sm text-white ${color} border-l-4 pointer-events-auto z-[300]`;
+            toast.innerHTML = `<span class="text-lg">${icon}</span> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+            setTimeout(() => { toast.classList.add('translate-x-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+    </script>
+
+    <script>
+        // Set Admin Name
+        document.addEventListener('DOMContentLoaded', () => {
+            const uStr = localStorage.getItem('currentUser');
+            if (uStr) {
+                const u = JSON.parse(uStr);
+                const el = document.getElementById('admin-header-name');
+                if (el) el.innerText = u.displayName || u.username || 'Admin';
+            }
+        });
+    </script>
+</body>
+
+</html>

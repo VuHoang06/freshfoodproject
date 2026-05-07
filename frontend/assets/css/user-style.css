@@ -1,0 +1,93 @@
+/* ============================================
+   MINI MART — User Style (Blue Navy / Stitch)
+   ============================================ */
+
+/* 1. Import Font Icon từ Google */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL,GRAD,opsz@20..48,100..700,0..1,-50..200');
+
+/* 2. Cấu hình bắt buộc để Icon KHÔNG biến thành chữ */
+/* !important vì Tailwind CSS ghi đè font-family */
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined' !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 24px !important;
+    line-height: 1 !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+    word-wrap: normal !important;
+    direction: ltr !important;
+    -webkit-font-smoothing: antialiased !important;
+    text-rendering: optimizeLegibility !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    font-feature-settings: 'liga' !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24 !important;
+}
+
+/* 3. Bảng màu Blue Navy (Stitch) — CSS Variables */
+:root {
+    --navy-900: #00236f;
+    --navy-800: #001a4d;
+    --navy-700: #1e3a8a;
+    --navy-600: #2552ca;
+    --navy-500: #446ce4;
+    --navy-400: #6b8aff;
+    --navy-300: #90a8ff;
+    --navy-200: #b6c4ff;
+    --navy-100: #dce1ff;
+    --navy-50:  #f0f2ff;
+    --surface:  #f7f9fb;
+    --surface-container: #eceef0;
+}
+
+/* 4. Tỉ lệ ảnh sản phẩm (Chống méo ảnh) */
+.product-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 1.5rem 1.5rem 0 0;
+}
+
+/* 5. Tùy chỉnh Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: var(--navy-900); border-radius: 10px; }
+
+/* 6. Sidebar & Header Layout */
+.user-sidebar {
+    background: linear-gradient(180deg, #0c1a3e 0%, #001a4d 50%, #00236f 100%);
+}
+
+/* 7. Smooth transitions cho tất cả interactive elements */
+a, button {
+    transition: all 0.2s ease;
+}
+
+/* 8. Grid sản phẩm — Đảm bảo không vỡ layout */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+}
+
+.product-grid img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+/* 9. Footer chuẩn */
+.user-footer {
+    margin-top: auto;
+    border-top: 1px solid #e2e8f0;
+    background: white;
+    padding: 1.25rem 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 700;
+}

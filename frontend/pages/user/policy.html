@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshFood - Chính sách giao hàng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Be Vietnam Pro', system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        html { scroll-behavior: smooth; }
+        .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; opacity: 0; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; vertical-align: middle; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased flex flex-col h-[100dvh] overflow-hidden">
+
+<div class="flex-1 flex flex-col overflow-y-auto bg-white relative min-h-0">
+
+    <!-- Top Bar -->
+    <div class="bg-green-700 text-white text-xs py-2">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
+            <div class="flex gap-4 sm:gap-6 font-medium">
+                <a href="policy.html" class="text-green-200 font-bold">Chính sách giao hàng</a>
+                <a href="guide.html" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div id="auth-section-guest" class="flex gap-3">
+                    <a href="register.html" class="hover:text-green-200 transition">Đăng ký</a>
+                    <span class="text-green-500">|</span>
+                    <a href="login.html" class="hover:text-green-200 transition font-bold">Đăng nhập</a>
+                </div>
+                <div id="auth-section-user" class="hidden flex items-center gap-3 relative">
+                    <button onclick="toggleAccountMenu()" class="flex items-center gap-2 hover:text-green-200 transition focus:outline-none">
+                        <span class="material-symbols-outlined text-green-200 text-xl">person</span>
+                        <span id="header-username" class="font-bold"></span>
+                    </button>
+                    <!-- Account Dropdown -->
+                    <div id="account-dropdown" class="hidden absolute top-8 right-0 w-72 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden transform origin-top-right transition-all">
+                        <div class="p-4 bg-green-50 border-b border-green-100 text-center">
+                            <span class="material-symbols-outlined text-4xl text-green-700 mb-2">face</span>
+                            <div class="font-black text-green-800" id="dropdown-name">Họ Tên</div>
+                            <div class="text-[10px] text-green-600 uppercase font-bold tracking-widest" id="dropdown-role">Khách hàng</div>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <a href="settings.html" class="w-full text-left px-4 py-2 hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-lg transition flex items-center gap-2">
+                                <span class="material-symbols-outlined text-lg">edit</span> Chỉnh sửa thông tin
+                            </a>
+                            <button onclick="confirmLogout()" class="w-full text-left px-4 py-2 hover:bg-red-50 text-sm font-bold text-red-600 rounded-lg transition flex items-center gap-2">
+                                <span class="material-symbols-outlined text-lg">logout</span> Đăng xuất
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-3 transition hover:opacity-90 shrink-0">
+                    <div class="w-10 h-10 bg-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-200">
+                        <span class="material-symbols-outlined text-white text-2xl">eco</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-bold text-slate-800 leading-none">FreshFood</span>
+                        <span class="text-[10px] text-green-600 font-bold uppercase tracking-widest mt-1">Organic Market</span>
+                    </div>
+                </a>
+                
+                <div class="flex items-center gap-6">
+                    <a href="products.html" class="hidden sm:block text-sm font-bold text-slate-500 hover:text-green-700 transition">Sản phẩm</a>
+                    <a href="cart.html" class="relative group cursor-pointer text-slate-500 hover:text-green-700 transition">
+                        <span class="material-symbols-outlined text-3xl font-light">shopping_cart</span>
+                        <span id="cart-count" class="hidden absolute -top-1 -right-2 bg-red-500 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white group-hover:scale-110 transition-transform">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="bg-gradient-to-br from-slate-800 to-slate-900 text-white py-20 px-4 fade-in-up">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="mb-6 inline-flex justify-center items-center w-20 h-20 bg-white/10 rounded-full border border-white/20">
+                <span class="material-symbols-outlined text-5xl text-white">local_shipping</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black mb-4 tracking-tighter">Chính Sách<br/>Giao Hàng</h1>
+            <p class="text-slate-300 text-lg md:text-xl font-medium max-w-2xl mx-auto">Cam kết giao hàng nhanh chóng, an toàn và đúng hẹn tới từng gia đình.</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 py-16 px-4 bg-[#f8fafc]">
+        <div class="max-w-5xl mx-auto space-y-8">
+
+            <!-- Phí giao hàng -->
+            <div class="fade-in-up delay-100 bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:-translate-y-1 transition-transform duration-300">
+                <div class="p-8 md:p-12">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center text-green-600 border border-green-100">
+                            <span class="material-symbols-outlined text-2xl">account_balance_wallet</span>
+                        </div>
+                        <h2 class="text-2xl font-black text-slate-800 tracking-tight">Chi Phí Vận Chuyển</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="group bg-green-50 border border-green-100 rounded-2xl p-8 text-center transition-all duration-300 hover:bg-green-600 hover:text-white">
+                            <div class="text-3xl font-black text-green-600 group-hover:text-white mb-3 transition-colors tracking-tighter">FREE</div>
+                            <div class="font-black text-slate-800 group-hover:text-white mb-2 transition-colors">Miễn phí Delivery</div>
+                            <div class="text-sm font-medium text-green-700/80 group-hover:text-green-100 transition-colors">Cho tất cả hóa đơn từ 200.000đ</div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 rounded-2xl p-8 text-center transition-all duration-300 hover:bg-slate-100">
+                            <div class="text-3xl font-black text-slate-700 mb-3 tracking-tighter flex items-center justify-center gap-1">15<span class="text-xl mt-1.5 font-bold">K</span></div>
+                            <div class="font-black text-slate-800 mb-2">Nội thành hỏa tốc</div>
+                            <div class="text-sm font-medium text-slate-500">Áp dụng đơn dưới 200.000đ</div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 rounded-2xl p-8 text-center transition-all duration-300 hover:bg-slate-100">
+                            <div class="text-3xl font-black text-slate-700 mb-3 tracking-tighter flex items-center justify-center gap-1">30<span class="text-xl mt-1.5 font-bold">K</span></div>
+                            <div class="font-black text-slate-800 mb-2">Ngoại thành / Vùng ven</div>
+                            <div class="text-sm font-medium text-slate-500">Áp dụng bán kính xa trung tâm</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thời gian giao hàng -->
+            <div class="fade-in-up delay-200 bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:-translate-y-1 transition-transform duration-300">
+                <div class="p-8 md:p-12">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-600 border border-slate-100">
+                            <span class="material-symbols-outlined text-2xl">schedule</span>
+                        </div>
+                        <h2 class="text-2xl font-black text-slate-800 tracking-tight">Thời Gian Giao Hàng</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="border border-slate-100 rounded-2xl p-6 hover:shadow-md transition-shadow relative overflow-hidden group">
+                            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-green-500"></div>
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 ml-4">
+                                <div>
+                                    <div class="font-black text-slate-800 text-lg mb-1 flex items-center gap-2">Nội thành Hà Nội & TP.HCM</div>
+                                    <div class="text-sm text-slate-500 font-medium">Đặt trước 12:00 sẽ nhận ngay trong ngày. Đặt sau 12:00 sẽ ưu tiên giao sáng sớm hôm sau.</div>
+                                </div>
+                                <div class="md:text-right shrink-0">
+                                    <div class="font-black text-green-600 text-2xl tracking-tight">2–4 giờ</div>
+                                    <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-0.5">Express Route</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border border-slate-100 rounded-2xl p-6 hover:shadow-md transition-shadow relative overflow-hidden group">
+                            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-slate-300"></div>
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 ml-4">
+                                <div>
+                                    <div class="font-black text-slate-800 text-lg mb-1">Tỉnh thành lân cận (Bán kính 200km)</div>
+                                    <div class="text-sm text-slate-500 font-medium">Phân phối bằng đường bộ tốc hành. Đảm bảo chất lượng.</div>
+                                </div>
+                                <div class="md:text-right shrink-0">
+                                    <div class="font-black text-slate-700 text-2xl tracking-tight">1–2 ngày</div>
+                                    <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-0.5">Standard</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border border-slate-100 rounded-2xl p-6 hover:shadow-md transition-shadow relative overflow-hidden group">
+                            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-slate-300"></div>
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 ml-4">
+                                <div>
+                                    <div class="font-black text-slate-800 text-lg mb-1">Quy mô toàn quốc</div>
+                                    <div class="text-sm text-slate-500 font-medium">Đóng gói lạnh chuyên dụng, gửi bưu phẩm chuyển phát nhanh đặc biệt.</div>
+                                </div>
+                                <div class="md:text-right shrink-0">
+                                    <div class="font-black text-slate-700 text-2xl tracking-tight">2–5 ngày</div>
+                                    <div class="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-0.5">Economy</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Đóng gói & Bảo quản -->
+            <div class="fade-in-up delay-300 bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:-translate-y-1 transition-transform duration-300">
+                <div class="p-8 md:p-12">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-600 border border-slate-100">
+                            <span class="material-symbols-outlined text-2xl">inventory_2</span>
+                        </div>
+                        <h2 class="text-2xl font-black text-slate-800 tracking-tight">Tiêu Chuẩn Đóng Gói</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="flex gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors">
+                            <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
+                                <span class="material-symbols-outlined">ac_unit</span>
+                            </div>
+                            <div>
+                                <div class="font-black text-slate-800 mb-1">Túi Giữ Nhiệt Lạnh</div>
+                                <p class="text-sm text-slate-500 leading-relaxed">Thực phẩm tươi sống được khóa trọn trong túi giữ nhiệt PE, duy trì nhiệt độ 4–8°C.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors">
+                            <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
+                                <span class="material-symbols-outlined">recycling</span>
+                            </div>
+                            <div>
+                                <div class="font-black text-slate-800 mb-1">Vật Liệu Eco-friendly</div>
+                                <p class="text-sm text-slate-500 leading-relaxed">Sử dụng hộp giấy tái chế sinh học giúp bảo vệ môi trường, giảm thiểu nilon.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors">
+                            <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
+                                <span class="material-symbols-outlined">lock</span>
+                            </div>
+                            <div>
+                                <div class="font-black text-slate-800 mb-1">Niêm Phong Seal Trắng</div>
+                                <p class="text-sm text-slate-500 leading-relaxed">Mỗi kiện hàng được dán tem chống hàng giả. Quý khách có quyền từ chối nếu tem xé rách.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors">
+                            <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600 shrink-0">
+                                <span class="material-symbols-outlined">smartphone</span>
+                            </div>
+                            <div>
+                                <div class="font-black text-slate-800 mb-1">Theo Dõi Cụ Thể</div>
+                                <p class="text-sm text-slate-500 leading-relaxed">Tiện lợi theo dõi tình trạng đơn trên hệ thống. Shipper sẽ gọi trước 30 phút giao hàng.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chính sách đổi trả -->
+            <div class="fade-in-up delay-400 bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:-translate-y-1 transition-transform duration-300">
+                <div class="p-8 md:p-12">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center text-red-600 border border-red-100">
+                            <span class="material-symbols-outlined text-2xl">cached</span>
+                        </div>
+                        <h2 class="text-2xl font-black text-slate-800 tracking-tight">Hoàn Trả & Thay Thế</h2>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-5 gap-8">
+                        <!-- Conditions -->
+                        <div class="md:col-span-2 bg-red-50 rounded-2xl p-6 md:p-8">
+                            <div class="font-black text-red-700 text-lg mb-4">Đổi trả siêu tốc 24H nếu:</div>
+                            <ul class="space-y-3 text-red-700 text-sm font-medium">
+                                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-sm mt-0.5">check</span> Giao sai đơn, sai khối lượng</li>
+                                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-sm mt-0.5">check</span> Rau củ dập nát, héo úa</li>
+                                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-sm mt-0.5">check</span> Thực phẩm hết hạn sử dụng</li>
+                                <li class="flex items-start gap-2"><span class="material-symbols-outlined text-sm mt-0.5">check</span> Bao bì bị rách phập phồng</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Process -->
+                        <div class="md:col-span-3">
+                            <div class="space-y-6 relative ml-2 md:pl-6 pt-2">
+                                <div class="absolute left-[1.15rem] md:left-[2.15rem] top-2 bottom-2 w-0.5 bg-slate-100 z-0"></div>
+                                
+                                <div class="flex gap-5 relative z-10">
+                                    <div class="w-10 h-10 bg-slate-800 text-white rounded-full flex items-center justify-center text-sm font-black shadow-md shrink-0">1</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 mb-1 mt-2">Báo Cáo Sự Cố</h4>
+                                        <p class="text-slate-500 text-sm">Chụp ảnh sản phẩm bị lỗi và liên hệ ngay Hotline để được hỗ trợ tức thì.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-5 relative z-10">
+                                    <div class="w-10 h-10 bg-slate-800 text-white rounded-full flex items-center justify-center text-sm font-black shadow-md shrink-0">2</div>
+                                    <div>
+                                        <h4 class="font-black text-slate-800 mb-1 mt-2">Xác Nhận & Đơn Bù</h4>
+                                        <p class="text-slate-500 text-sm">Đội ngũ CSKH xử lý và khởi tạo đơn giao bù trong vòng 2 tiếng đồng hồ.</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-5 relative z-10">
+                                    <div class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-black shadow-md shrink-0">
+                                        <span class="material-symbols-outlined text-xl">done</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-black text-green-700 mb-1 mt-2">Hoàn Tất Đổi Trả</h4>
+                                        <p class="text-slate-500 text-sm">Shipper sẽ giao đồ mới và thu hồi sản phẩm lỗi không tốn bất cứ phí ship nào.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotline CTA -->
+            <div class="mt-16 text-center">
+                <div class="bg-gradient-to-r from-slate-800 to-slate-900 rounded-3xl p-8 md:p-12 text-white shadow-2xl flex flex-col items-center">
+                    <span class="material-symbols-outlined text-5xl mb-4 text-green-400">headset_mic</span>
+                    <h3 class="text-2xl font-black tracking-tight mb-2">Gặp Sự Cố Khi Nhận Hàng?</h3>
+                    <p class="text-slate-400 text-sm mb-8">Đổi ngũ thường trực luôn có mặt ở đầu dây này để hỗ trợ bạn.</p>
+                    
+                    <div class="flex justify-center gap-4 w-full">
+                        <a href="tel:1800123456" class="bg-green-600 text-white font-black px-8 py-3 rounded-xl hover:bg-green-500 transition-colors uppercase tracking-widest text-sm shadow-lg flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">call</span> 1800 123 456
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 pt-12 pb-4 mt-auto">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-4">
+                <div class="col-span-1 lg:col-span-1">
+                    <a href="index.html" class="flex items-center gap-3 mb-4">
+                        <div class="w-9 h-9 bg-green-700 rounded-lg flex items-center justify-center">
+                            <span class="material-symbols-outlined text-white text-xl">eco</span>
+                        </div>
+                        <span class="text-xl font-bold text-slate-800">FreshFood</span>
+                    </a>
+                    <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                        FreshFood - Hệ thống cung cấp thực phẩm hữu cơ, rau củ sạch đạt chuẩn VietGAP & GlobalGAP. Sức khỏe của bạn là niềm hạnh phúc của chúng tôi.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">MUA SẮM</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-slate-500 hover:text-green-600 transition">Tất cả sản phẩm</a></li>
+                        <li><a href="products.html" class="text-slate-500 hover:text-green-600 transition">Khám phá</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">CHÍNH SÁCH</h4>
+                    <ul class="space-y-2">
+                        <li><a href="policy.html" class="text-slate-500 hover:text-green-600 transition">Chính sách giao hàng</a></li>
+                        <li><a href="guide.html" class="text-slate-500 hover:text-green-600 transition">Hướng dẫn mua sắm</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">LIÊN HỆ</h4>
+                    <ul class="space-y-2">
+                        <li class="flex gap-3">
+                            <span class="material-symbols-outlined text-green-600 text-lg">location_on</span>
+                            <span class="text-slate-500 text-[13px]">123 Đường Organic, Quận 1, TP. HCM</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <span class="material-symbols-outlined text-green-600 text-lg">call</span>
+                            <span class="text-slate-500 text-[13px]">1900 1234 - 0987 654 321</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-green-600 text-lg">mail</span>
+                            <span class="text-slate-500 text-[13px]">support@freshfood.vn</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+<script>
+    function toggleAccountMenu() {
+        const menu = document.getElementById('account-dropdown');
+        menu.classList.toggle('hidden');
+    }
+
+    function confirmLogout() {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
+        checkAuth();
+    }
+
+    function checkAuth() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const userStr = localStorage.getItem('currentUser');
+        
+        if (isLoggedIn && userStr) {
+            const user = JSON.parse(userStr);
+            const userEl = document.getElementById('header-username');
+            if(userEl) userEl.innerText = user.displayName || user.username || 'Khách hàng';
+            
+            const dropName = document.getElementById('dropdown-name');
+            if(dropName) dropName.innerText = user.displayName || user.username || 'Khách hàng';
+            
+            document.getElementById('auth-section-guest').classList.add('hidden');
+            document.getElementById('auth-section-user').classList.remove('hidden');
+        } else {
+            document.getElementById('auth-section-guest').classList.remove('hidden');
+            const authUser = document.getElementById('auth-section-user');
+            if(authUser) authUser.classList.add('hidden');
+        }
+        updateCartBadges();
+    }
+
+    function updateCartBadges() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const headerBadge = document.getElementById('cart-count');
+        if (!headerBadge) return;
+
+        if (!isLoggedIn) {
+            headerBadge.classList.remove('flex');
+            headerBadge.classList.add('hidden');
+            return;
+        }
+
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let total = 0;
+        cart.forEach(c => total += c.qty);
+
+        if (total > 0) {
+            headerBadge.innerText = total;
+            headerBadge.classList.remove('hidden');
+            headerBadge.classList.add('flex');
+        } else {
+            headerBadge.classList.remove('flex');
+            headerBadge.classList.add('hidden');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        checkAuth();
+    });
+</script>
+</body>
+</html>

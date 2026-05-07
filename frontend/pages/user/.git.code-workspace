@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"path": "../../../.git"
+		},
+		{
+			"path": "../../../admin"
+		},
+		{
+			"path": "../../../backend"
+		},
+		{
+			"path": "../../../database"
+		},
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../staff"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "frontend"
+	}
+}

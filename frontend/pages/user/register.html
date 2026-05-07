@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshFood - Đăng ký tài khoản</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        .smooth-transition { transition: all 0.3s ease-in-out; }
+        .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'wght' 200;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased h-[100dvh] flex flex-col overflow-hidden">
+
+<div class="flex-1 flex flex-col overflow-y-auto bg-slate-50 relative min-h-0">
+    
+    <!-- Header (Synced) -->
+    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-3 transition hover:opacity-90 shrink-0">
+                    <div class="w-10 h-10 bg-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-200">
+                        <span class="material-symbols-outlined text-white text-2xl">eco</span>
+                    </div>
+                    <div class="flex flex-col hidden sm:flex">
+                        <span class="text-xl font-bold text-slate-800 leading-none">FreshFood</span>
+                        <span class="text-[10px] text-green-600 font-bold uppercase tracking-widest mt-1">Organic Market</span>
+                    </div>
+                </a>
+                <div class="flex items-center space-x-6">
+                    <a href="index.html" class="text-sm font-bold text-slate-500 hover:text-green-700 transition">Trở về trang chủ</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex items-center justify-center p-4 md:p-8 bg-gradient-to-br from-green-50 to-slate-50 relative overflow-hidden">
+        <!-- Abstract Shapes -->
+        <div class="absolute -top-24 -left-24 w-64 h-64 bg-green-200 rounded-full blur-3xl opacity-30"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-green-100 rounded-full blur-3xl opacity-40"></div>
+
+        <div class="max-w-4xl w-full relative z-10 fade-in-up max-h-full overflow-y-auto hide-scroll rounded-[2.5rem]">
+            <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden border border-slate-100 flex flex-col md:flex-row">
+                <!-- Left Side: Image/Intro -->
+                <div class="hidden md:block md:w-5/12 relative text-white">
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80" alt="Fresh Groceries" class="absolute inset-0 w-full h-full object-cover">
+                    <!-- Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-green-900/90 via-green-800/60 to-transparent"></div>
+                    
+                    <div class="relative z-10 h-full flex flex-col justify-end p-8 md:p-10">
+                        <h2 class="text-2xl font-bold mb-4 leading-tight">Gia nhập cộng đồng FreshFood!</h2>
+                        <ul class="space-y-3 text-sm font-medium opacity-90">
+                            <li class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-green-300">check_circle</span> Hơn 1000+ sản phẩm sạch
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-green-300">check_circle</span> Ưu đãi 20% đơn đầu tiên
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-green-300">check_circle</span> Tích điểm đổi quà hấp dẫn
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right Side: Form -->
+                <div class="flex-1 p-6 md:p-8 border-l border-slate-100 flex flex-col justify-center">
+                    <div class="text-center md:text-left mb-4">
+                        <h1 class="text-xl sm:text-2xl font-bold text-slate-800 mb-2">Tạo tài khoản</h1>
+                        <p class="text-slate-500 font-medium text-xs sm:text-sm">Chỉ mất 30 giây để bắt đầu mua sắm cùng FreshFood.</p>
+                    </div>
+
+                    <form id="register-form" class="space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-sm font-bold text-slate-600 block pl-1">Họ và tên</label>
+                                <input type="text" id="reg-fullname" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition text-sm" placeholder="Nguyễn Văn A" required>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-sm font-bold text-slate-600 block pl-1">Số điện thoại</label>
+                                <input type="tel" id="reg-phone" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition text-sm" placeholder="0123 456 789" required>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-sm font-bold text-slate-600 block pl-1">Tên đăng nhập</label>
+                            <input type="text" id="reg-username" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition text-sm" placeholder="Nhập tên đăng nhập của bạn" required>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-sm font-bold text-slate-600 block pl-1">Mật khẩu</label>
+                            <input type="password" id="reg-password" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-500 transition text-sm" placeholder="••••••••" required>
+                        </div>
+
+                        <label class="flex items-center gap-2 cursor-pointer group px-1 pt-1">
+                            <input type="checkbox" class="w-4 h-4 rounded border-slate-300 text-green-600 focus:ring-green-500 cursor-pointer transition" required>
+                            <span class="text-sm font-bold text-slate-500 group-hover:text-slate-700 transition">Tôi đồng ý với chính sách và bảo mật</span>
+                        </label>
+
+                        <button type="submit" class="w-full bg-green-600 text-white py-2.5 rounded-xl font-bold hover:bg-green-700 transition shadow-lg shadow-green-200 mt-3 flex justify-center items-center gap-2">
+                            Đăng ký ngay
+                        </button>
+                    </form>
+
+                    <div class="mt-5 pt-4 border-t border-slate-100 text-center">
+                        <p class="text-sm font-medium text-slate-500">
+                            Đã có tài khoản? <a href="login.html" class="text-green-600 font-bold hover:underline transition">Đăng nhập</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer (Synced) -->
+    <footer class="bg-white text-slate-400 py-6 text-center text-sm font-medium border-t border-slate-100 mt-auto">
+        © 2024 FreshFood. Đã đăng ký bản quyền.
+    </footer>
+</div>
+
+<div id="toast-container" class="fixed top-20 right-4 md:top-24 md:right-8 z-[70] flex flex-col gap-2 pointer-events-none"></div>
+
+<script>
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('reg-username').value;
+        const password = document.getElementById('reg-password').value;
+        const fullName = document.getElementById('reg-fullname').value;
+        const phone = document.getElementById('reg-phone').value;
+
+        try {
+            const res = await fetch('http://localhost:5000/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, fullName, phone })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                showToast('🎉 Đăng ký thành công! Đang chuyển trang...');
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('currentUser', JSON.stringify({
+                    username: data.username,
+                    displayName: data.fullName || data.username,
+                    role: data.role,
+                    fullName: data.fullName || '',
+                    phone: data.phone || phone || '',
+                    email: data.email || '',
+                    defaultAddress: data.defaultAddress || ''
+                }));
+                setTimeout(() => window.location.href = 'index.html', 1200);
+            } else {
+                showToast(data.message || 'Đăng ký thất bại!', 'error');
+            }
+        } catch (err) {
+            console.error(err);
+            showToast('Lỗi kết nối tới Server. Đảm bảo Backend đang chạy.', 'error');
+        }
+    });
+
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        const color = type === 'success' ? 'bg-green-600' : 'bg-red-500';
+        const icon = type === 'success' ? 'check_circle' : 'error';
+        
+        toast.className = `transform translate-x-10 opacity-0 smooth-transition px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 font-bold text-sm text-white ${color} pointer-events-auto border border-white/20`;
+        toast.innerHTML = `<span class="material-symbols-outlined text-xl">${icon}</span> <span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+        setTimeout(() => {
+            toast.classList.add('translate-x-10', 'opacity-0');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+</script>
+</body>
+</html>

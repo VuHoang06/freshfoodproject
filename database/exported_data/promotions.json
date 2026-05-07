@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "69d0333d516988e5a3bc6ca4",
+    "code": "FRESH20",
+    "discountPercentage": 20,
+    "discountAmount": 0,
+    "minPurchase": 20000,
+    "expiryDate": "2026-05-03T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2026-04-03T21:38:05.038Z",
+    "updatedAt": "2026-04-03T21:38:05.038Z",
+    "__v": 0
+  },
+  {
+    "_id": "69d03395516988e5a3bc6ca8",
+    "code": "FRESH1",
+    "discountPercentage": 0,
+    "discountAmount": 1000,
+    "minPurchase": 20000,
+    "expiryDate": "2026-05-03T00:00:00.000Z",
+    "isActive": true,
+    "createdAt": "2026-04-03T21:39:33.285Z",
+    "updatedAt": "2026-04-03T21:39:33.285Z",
+    "__v": 0
+  }
+]

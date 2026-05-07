@@ -1,0 +1,33 @@
+[
+  {
+    "_id": "69cfa0aed0460f99e23d5822",
+    "username": "admin",
+    "password": "$2b$10$r5AFPGnfFHipZ4vqIGwb7u8J.8Muozk5BKOdgWFbbuu1S3pSE2vDi",
+    "role": "admin",
+    "fullName": "Quản Trị Viên Tối Cao",
+    "__v": 0,
+    "createdAt": "2026-04-03T11:12:46.539Z",
+    "updatedAt": "2026-04-03T11:12:46.539Z"
+  },
+  {
+    "_id": "69cfa0aed0460f99e23d5823",
+    "username": "staff",
+    "password": "$2b$10$r5AFPGnfFHipZ4vqIGwb7u8J.8Muozk5BKOdgWFbbuu1S3pSE2vDi",
+    "role": "staff",
+    "fullName": "Nhân Viên Cửa Hàng POS",
+    "__v": 0,
+    "createdAt": "2026-04-03T11:12:46.540Z",
+    "updatedAt": "2026-04-03T11:12:46.540Z"
+  },
+  {
+    "_id": "69cfceee516988e5a3bc6b08",
+    "username": "nhom7@gmail.com",
+    "password": "$2b$10$uXUFvHbMpIBdnIDNUlfLPOZyfk33AZqAB7MxFcmfBNi9IAX2ymLo2",
+    "role": "user",
+    "fullName": "a",
+    "phone": "1234567890",
+    "createdAt": "2026-04-03T14:30:06.268Z",
+    "updatedAt": "2026-04-03T14:30:06.268Z",
+    "__v": 0
+  }
+]

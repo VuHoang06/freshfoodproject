@@ -1,0 +1,10 @@
+{
+  "exportedAt": "2026-04-03T23:23:40.780Z",
+  "database": "freshfood_db",
+  "collections": {
+    "orders": 6,
+    "products": 36,
+    "promotions": 2,
+    "users": 3
+  }
+}

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshFood - Trang chủ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <style>
+        body { font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        .smooth-transition { transition: all 0.3s ease-in-out; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .nav-link { position: relative; }
+        .nav-link.active { color: #15803d; }
+        .nav-link.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: #15803d; }
+        html { scroll-behavior: smooth; }
+        .fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        .swiper-banner { width: 100%; height: 500px; }
+        .swiper-slide-inner { width: 100%; height: 100%; border-radius: 0; overflow: hidden; position: relative; }
+        @media (min-width: 768px) {
+            .swiper-banner { height: 600px; }
+        }
+        /* Custom Pagination */
+        .swiper-pagination-bullet { background: white; opacity: 0.5; width: 30px; height: 4px; border-radius: 2px; transition: all 0.3s; }
+        .swiper-pagination-bullet-active { opacity: 1; background: #22c55e; width: 50px; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased h-[100dvh] flex flex-col overflow-hidden">
+
+<div class="flex-1 flex flex-col overflow-y-auto bg-white relative min-h-0">
+    
+    <!-- Top Bar -->
+    <div class="bg-green-700 text-white text-xs py-2">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-0">
+            <div class="flex gap-4 sm:gap-6 font-medium">
+                <a href="policy.html" class="hover:text-green-200 transition">Chính sách giao hàng</a>
+                <a href="guide.html" class="hover:text-green-200 transition">Hướng dẫn mua hàng</a>
+            </div>
+            <div class="flex gap-4 items-center">
+                <div id="auth-section-guest" class="flex gap-3">
+                    <a href="register.html" class="hover:text-green-200 transition">Đăng ký</a>
+                    <span class="text-green-500">|</span>
+                    <a href="login.html" class="hover:text-green-200 transition font-bold">Đăng nhập</a>
+                </div>
+                <div id="auth-section-user" class="hidden flex items-center gap-3 relative">
+                    <button onclick="toggleAccountMenu()" class="flex items-center gap-2 hover:text-green-200 transition focus:outline-none">
+                        <span class="material-symbols-outlined text-green-200 text-xl">person</span>
+                        <span id="header-username" class="font-bold"></span>
+                    </button>
+                    <!-- Account Dropdown Menu thay cho trang Settings -->
+                    <div id="account-dropdown" class="hidden absolute top-8 right-0 w-72 bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden transform origin-top-right transition-all">
+                        <div class="p-4 bg-green-50 border-b border-green-100 text-center">
+                            <span class="text-3xl block mb-2">🧑‍🌾</span>
+                            <div class="font-black text-green-800" id="dropdown-name">Họ Tên</div>
+                            <div class="text-[10px] text-green-600 uppercase font-bold tracking-widest" id="dropdown-role">Khách hàng</div>
+                        </div>
+                        <div class="p-4 space-y-3">
+                            <a href="settings.html" class="w-full text-left px-4 py-2 hover:bg-slate-50 text-sm font-bold text-slate-600 rounded-lg transition flex items-center gap-2">
+                                <span>✏️</span> Chỉnh sửa thông tin
+                            </a>
+                            <button onclick="logoutConfirm()" class="w-full text-left px-4 py-2 hover:bg-red-50 text-sm font-bold text-red-600 rounded-lg transition flex items-center gap-2">
+                                <span class="material-symbols-outlined text-lg">logout</span> Đăng xuất
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white py-4 border-b border-slate-100 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="flex items-center gap-3 transition hover:opacity-90 shrink-0">
+                    <div class="w-10 h-10 bg-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-200">
+                        <span class="material-symbols-outlined text-white text-2xl">eco</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-bold text-slate-800 leading-none">FreshFood</span>
+                        <span class="text-[10px] text-green-600 font-bold uppercase tracking-widest mt-1">Organic Market</span>
+                    </div>
+                </a>
+                
+                <div class="hidden md:flex flex-1 max-w-xl mx-8 relative">
+                    <input type="text" id="header-search" placeholder="Tìm kiếm sản phẩm..." class="w-full pl-4 pr-10 py-2.5 bg-slate-50 border-none rounded-2xl focus:outline-none focus:ring-2 focus:ring-green-500 text-sm transition font-medium" onkeydown="if(event.key==='Enter') goSearch()">
+                    <button onclick="goSearch()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-green-600 transition">
+                        <span class="material-symbols-outlined text-xl">search</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center space-x-6 shrink-0">
+                    <a href="orders.html" class="flex items-center gap-2 text-slate-600 hover:text-green-700 transition font-medium text-sm">
+                        <span class="material-symbols-outlined text-2xl">receipt_long</span>
+                        <span class="hidden sm:inline font-bold">Đơn hàng</span>
+                    </a>
+                    <a href="cart.html" class="relative group flex items-center gap-2">
+                        <span class="material-symbols-outlined text-2xl group-hover:text-green-600 transition">shopping_cart</span>
+                        <span id="header-cart-count" class="hidden absolute -top-1 -right-2 bg-green-600 text-white text-[10px] font-black w-5 h-5 rounded-full items-center justify-center border-2 border-white">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="bg-white mt-4 hidden md:block">
+            <div class="max-w-7xl mx-auto px-4 flex justify-center space-x-12 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <a href="index.html" class="nav-link active hover:text-green-700 transition pb-3">Trang Chủ</a>
+                <a href="products.html" class="nav-link hover:text-green-700 transition pb-3">Sản Phẩm</a>
+                <a href="explore.html" class="nav-link hover:text-green-700 transition pb-3">Khám Phá</a>
+                <a href="coupons.html" class="nav-link hover:text-green-700 transition pb-3">Khuyến Mãi</a>
+                <a href="favorite.html" class="nav-link hover:text-green-700 transition pb-3">Yêu Thích</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col w-full pb-20 md:pb-0">
+        
+        <!-- Banner Mới: Carousel Full Width -->
+        <div class="swiper swiper-banner fade-in-up">
+            <div class="swiper-wrapper">
+                <!-- Slide 1 -->
+                <div class="swiper-slide">
+                    <div class="swiper-slide-inner bg-slate-900 group">
+                        <img src="https://images.unsplash.com/photo-1495107334309-fcf20504a5ab?w=1600&q=80" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-1000">
+                        <div class="absolute inset-0 flex items-center px-8 md:px-24">
+                            <div class="max-w-xl">
+                                <h2 class="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tighter drop-shadow-lg">Siêu Thị<br>Hữu Cơ Tươi</h2>
+                                <p class="text-green-100 text-lg mb-8 drop-shadow">Món quà từ thiên nhiên, an toàn 100% cho sức khoẻ gia đình bạn.</p>
+                                <button onclick="window.location.href='products.html'" class="bg-green-500 hover:bg-green-400 text-white font-bold px-8 py-4 rounded-full uppercase tracking-widest text-xs transition shadow-2xl">Mua sắm ngay</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="swiper-slide">
+                    <div class="swiper-slide-inner bg-slate-900 group">
+                        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&q=80" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition duration-1000">
+                        <div class="absolute inset-0 flex items-center justify-end px-8 md:px-24 text-right">
+                            <div class="max-w-xl">
+                                <h2 class="text-4xl md:text-6xl font-bold text-white mb-4 tracking-tighter drop-shadow-lg">Ưu Đãi<br>Đầu Tuần</h2>
+                                <p class="text-green-100 text-lg mb-8 drop-shadow">Nhập mã FRESH20 giảm ngay 20% cho rau xanh.</p>
+                                <button onclick="window.location.href='coupons.html'" class="bg-white text-green-700 hover:bg-green-50 font-bold px-8 py-4 rounded-full uppercase tracking-widest text-xs transition shadow-2xl">Lấy mã ngay</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination pb-4"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 py-12 w-full flex-1">
+            <!-- Đang Giảm Giá -->
+            <div class="mb-16">
+                <div class="flex items-center justify-between mb-8 border-l-4 border-green-600 pl-4">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight uppercase">Ưu Đãi <span class="text-green-600">Hot</span></h2>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Săn thực phẩm sạch với giá cực hời</p>
+                    </div>
+                    <a href="products.html" class="group flex items-center gap-2 px-5 py-2.5 bg-slate-50 text-slate-500 hover:bg-green-600 hover:text-white rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-500">
+                        Xem tất cả
+                        <span class="material-symbols-outlined text-base">arrow_forward</span>
+                    </a>
+                </div>
+                <div id="home-sale-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"></div>
+            </div>
+
+            <!-- Bán Chạy -->
+            <div class="mb-12">
+                <div class="flex items-center justify-between mb-8 border-l-4 border-green-600 pl-4">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight uppercase">Bán Chạy <span class="text-green-600">Nhất</span></h2>
+                        <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Được cộng đồng nội trợ tin dùng</p>
+                    </div>
+                    <a href="products.html" class="group flex items-center gap-2 px-5 py-2.5 bg-slate-50 text-slate-500 hover:bg-green-600 hover:text-white rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-500">
+                        Tất cả
+                        <span class="material-symbols-outlined text-base">arrow_forward</span>
+                    </a>
+                </div>
+                <div id="home-bestseller-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-white border-t border-slate-200 pt-12 pb-4 mt-auto">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-4">
+                    <div class="col-span-1 lg:col-span-1">
+                        <a href="../index.html" class="flex items-center gap-3 mb-4">
+                            <div class="w-9 h-9 bg-green-700 rounded-lg flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-xl">eco</span>
+                            </div>
+                            <span class="text-xl font-bold text-slate-800">FreshFood</span>
+                        </a>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-4">
+                            FreshFood - Hệ thống cung cấp thực phẩm hữu cơ, rau củ sạch đạt chuẩn VietGAP & GlobalGAP. Sức
+                            khỏe của bạn là niềm hạnh phúc của chúng tôi.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">MUA SẮM</h4>
+                        <ul class="space-y-2">
+                            <li><a href="index.html" class="text-slate-500 hover:text-green-600 transition">Tất cả sản phẩm</a></li>
+                            <li><a href="products.html?category=fruits" class="text-slate-500 hover:text-green-600 transition">Trái cây tươi</a></li>
+                            <li><a href="products.html?category=vegetables" class="text-slate-500 hover:text-green-600 transition">Rau củ hữu cơ</a></li>
+                            <li><a href="explore.html" class="text-slate-500 hover:text-green-600 transition">Combo khuyến mãi</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">CHÍNH SÁCH</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Chính sách vận chuyển</a></li>
+                            <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Chính sách đổi trả</a></li>
+                            <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Bảo mật thông tin</a></li>
+                            <li><a href="#" class="text-slate-500 hover:text-green-600 transition">Điều khoản sử dụng</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-2 tracking-wide text-sm">LIÊN HỆ</h4>
+                        <ul class="space-y-2">
+                            <li class="flex gap-3">
+                                <span class="material-symbols-outlined text-green-600 text-lg">location_on</span>
+                                <span class="text-slate-500 text-[13px]">123 Đường Organic, Quận 1, TP. HCM</span>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="material-symbols-outlined text-green-600 text-lg">call</span>
+                                <span class="text-slate-500 text-[13px]">1900 1234 - 0987 654 321</span>
+                            </li>
+                            <li class="flex items-center justify-between gap-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-green-600 text-lg">mail</span>
+                                    <span class="text-slate-500 text-[13px]">support@freshfood.vn</span>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="#" class="w-7 h-7 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:border-green-500 hover:text-green-500 transition">
+                                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M18.77,7.46H14.5v-1.9c0-.9.6-1.1,1-1.1h3V1h-4.33c-4.78,0-5.37,3.52-5.37,5.48v2.12H5.09v3.74h3.71v11.66h4.51V11.2h3.3l1.16-3.74Z"></path></svg>
+                                    </a>
+                                    <a href="#" class="w-7 h-7 border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:border-green-500 hover:text-green-500 transition">
+                                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.31,2h-1c-2,0-3.35,0-4.42.08C5.8,2.17,5,2.32,4.3,2.7A4.6,4.6,0,0,0,2.7,4.3C2.32,5,2.17,5.8,2.08,6.86,2,7.93,2,9.28,2,11.31v1c0,2,0,3.35.08,4.42.09,1.07.24,1.82.62,2.51a4.6,4.6,0,0,0,1.6,1.6c.69.38,1.44.53,2.51.62,1.07.08,2.42.08,4.42.08h1c2,0,3.35,0,4.42-.08,1.07-.09,1.82-.24,2.51-.62a4.6,4.6,0,0,0,1.6-1.6c.38-.69.53-1.44.62-2.51.08-1.07.08-2.42.08-4.42v-1c0-2,0-3.35-.08-4.42-.09-1.07-.24-1.82-.62-2.51a4.6,4.6,0,0,0-1.6-1.6c-.69-.38-1.44-.53-2.51-.62C15.66,2,14.31,2,12.31,2ZM12,6.87A5.13,5.13,0,1,1,6.87,12,5.13,5.13,0,0,1,12,6.87Zm6.39-1.11a1.2,1.2,0,1,1-1.2-1.2A1.2,1.2,0,0,1,18.39,5.76ZM12,15.13A3.13,3.13,0,1,0,8.87,12,3.13,3.13,0,0,0,12,15.13Z"></path></svg>
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<!-- Logout Confirm Modal -->
+<div id="logout-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] items-center justify-center">
+    <div class="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-300" id="logout-modal-content">
+        <h3 class="text-2xl font-black text-slate-800 mb-2">Đăng xuất?</h3>
+        <p class="text-slate-500 font-medium mb-8">Bạn có chắc chắn muốn đăng xuất khỏi tài khoản hiện tại không?</p>
+        <div class="flex gap-3">
+            <button onclick="closeLogoutModal()" class="flex-1 py-3 bg-slate-100 text-slate-600 font-bold rounded-xl hover:bg-slate-200 uppercase tracking-widest text-xs transition">Hủy bỏ</button>
+            <button onclick="confirmLogout()" class="flex-1 py-3 bg-slate-800 text-white font-bold rounded-xl hover:bg-black uppercase tracking-widest text-xs transition shadow-lg">Có, Đăng xuất</button>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Nav -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-40 bg-white border-t border-slate-100 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] flex justify-around items-center py-3 pb-safe">
+    <a href="index.html" class="flex flex-col items-center text-green-700 font-bold">
+        <span class="material-symbols-outlined text-2xl">home</span>
+    </a>
+    <a href="explore.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="material-symbols-outlined text-2xl">explore</span>
+    </a>
+    <a href="favorite.html" class="flex flex-col items-center text-slate-400 hover:text-green-700 transition">
+        <span class="material-symbols-outlined text-2xl">bookmark</span>
+    </a>
+</nav>
+
+<div id="toast-container" class="fixed top-20 right-4 z-[150] flex flex-col gap-2 pointer-events-none"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script>
+    // Khởi tạo Carousel
+    new Swiper('.swiper-banner', {
+        loop: true,
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+        effect: 'fade',
+        fadeEffect: { crossFade: true }
+    });
+
+    let productsData = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        checkAuth();
+        fetchProducts();
+    });
+
+    async function fetchProducts() {
+        try {
+            const response = await fetch('http://localhost:5000/api/products');
+            if (response.ok) {
+                productsData = await response.json();
+                renderProducts();
+            } else { throw new Error('API Error'); }
+        } catch (error) {
+            productsData = [
+                { _id: 1, name: 'Cải Chíp Hữu Cơ Thủy Canh', category: 'rau', price: 35000, unit: '500g', image: 'https://images.unsplash.com/photo-1557844352-761f2565b576?w=500&q=80', sale: true, bestseller: true },
+                { _id: 2, name: 'Thịt Lợn Sinh Học', category: 'thit', price: 120000, oldPrice: 135000, unit: '1kg', image: 'https://images.unsplash.com/photo-1607623814075-e51df1bd6372?w=500&q=80', sale: true, bestseller: true }
+            ];
+            renderProducts();
+        }
+    }
+
+    // --- Authentication Logic ---
+    function checkAuth() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const userStr = localStorage.getItem('currentUser');
+        
+        if (isLoggedIn && userStr) {
+            const user = JSON.parse(userStr);
+            document.getElementById('header-username').innerText = user.displayName;
+            document.getElementById('dropdown-name').innerText = user.displayName;
+            document.getElementById('dropdown-role').innerText = user.role || 'Thành viên';
+            document.getElementById('auth-section-guest').classList.add('hidden');
+            document.getElementById('auth-section-user').classList.remove('hidden');
+        } else {
+            document.getElementById('auth-section-guest').classList.remove('hidden');
+            document.getElementById('auth-section-user').classList.add('hidden');
+        }
+        updateCartBadges(); // Cập nhật giỏ hàng theo trạng thái login
+    }
+
+    function toggleAccountMenu() {
+        const menu = document.getElementById('account-dropdown');
+        menu.classList.toggle('hidden');
+    }
+
+    // --- Logout Tinh tế ---
+    function logoutConfirm() {
+        document.getElementById('account-dropdown').classList.add('hidden');
+        const modal = document.getElementById('logout-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => document.getElementById('logout-modal-content').classList.remove('scale-95'), 10);
+    }
+
+    function closeLogoutModal() {
+        document.getElementById('logout-modal-content').classList.add('scale-95');
+        setTimeout(() => {
+            const modal = document.getElementById('logout-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 200);
+    }
+
+    function confirmLogout() {
+        closeLogoutModal();
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('token');
+        checkAuth();
+        showToastDesign('Đăng xuất thành công');
+    }
+
+    // --- Cập nhật Nút Sản Phẩm & Giỏ hàng ---
+    function formatMoney(amount) {
+        return amount.toLocaleString('vi-VN') + 'đ';
+    }
+
+    function createProductCard(p) {
+        const idStr = p._id || p.id;
+        return `
+            <div class="bg-white rounded-[2rem] border border-slate-100 overflow-hidden hover:shadow-2xl hover:border-green-200 transition-all duration-300 relative group cursor-pointer h-full flex flex-col" 
+                 onclick="window.location.href='product-detail.html?id=${idStr}'">
+                
+                <!-- Image Area -->
+                <div class="h-56 md:h-64 bg-slate-50 relative overflow-hidden flex items-center justify-center group-hover:bg-slate-100/50 transition-colors duration-500">
+                    ${p.sale ? '<div class="absolute top-4 left-4 bg-red-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-10 shadow-lg uppercase tracking-widest">Sale</div>' : ''}
+                    <img src="${p.image}" 
+                         class="w-full h-full object-cover transform group-hover:scale-[1.05] transition-transform duration-700" 
+                         alt="${p.name}">
+                </div>
+
+                <!-- Info Area -->
+                <div class="p-5 pt-3 flex flex-col flex-1 h-[140px] md:h-[160px] justify-between">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-base md:text-lg leading-tight mb-1 line-clamp-2 uppercase tracking-tight">${p.name}</h3>
+                        <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">${p.unit}</div>
+                    </div>
+
+                    <div class="flex items-center justify-between mt-auto">
+                        <div class="flex flex-col">
+                            ${p.oldPrice ? `<span class="text-[10px] text-slate-400 line-through decoration-red-400/50">${formatMoney(p.oldPrice)}</span>` : ''}
+                            <span class="text-xl font-bold text-green-600 tracking-tighter">${formatMoney(p.price)}</span>
+                        </div>
+                        
+                        <button onclick="event.stopPropagation(); handleAddToCart(event, '${idStr}', false)" 
+                                class="w-10 h-10 bg-green-500 text-white rounded-[1rem] flex items-center justify-center hover:bg-green-400 hover:scale-110 transition shadow-lg shadow-green-500/30">
+                            <span class="text-xl font-medium block leading-none">+</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    function renderProducts() {
+        document.getElementById('home-sale-grid').innerHTML = productsData.filter(p => p.sale).slice(0,4).map(p => createProductCard(p)).join('');
+        document.getElementById('home-bestseller-grid').innerHTML = productsData.filter(p => p.bestseller).slice(0,4).map(p => createProductCard(p)).join('');
+    }
+
+    function handleAddToCart(event, productId, isBuyNow) {
+        event.preventDefault();
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const product = productsData.find(p => (p._id || p.id) == productId);
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const existing = cart.find(i => (i._id || i.id) == productId);
+        
+        if (existing) existing.qty += 1;
+        else cart.push({ ...product, qty: 1, selected: true });
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartBadges();
+
+        if (isBuyNow) window.location.href = 'cart.html';
+        else showToastDesign(`Đã thêm vào giỏ`, '✅');
+    }
+
+    function updateCartBadges() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const headerBadge = document.getElementById('header-cart-count');
+        if (!headerBadge) return;
+
+        if (!isLoggedIn) {
+            headerBadge.classList.remove('flex');
+            headerBadge.classList.add('hidden');
+            return;
+        }
+
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let total = 0;
+        cart.forEach(c => total += c.qty);
+
+        if (total > 0) {
+            headerBadge.innerText = total;
+            headerBadge.classList.remove('hidden');
+            headerBadge.classList.add('flex');
+        } else {
+            headerBadge.classList.remove('flex');
+            headerBadge.classList.add('hidden');
+        }
+    }
+
+    function goSearch() {
+        const q = document.getElementById('header-search')?.value?.trim();
+        if (q) window.location.href = `products.html?search=${encodeURIComponent(q)}`;
+        else window.location.href = 'products.html';
+    }
+
+    function getFavKey() {
+        const userStr = localStorage.getItem('currentUser');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            return 'favorites_' + (user.id || user._id || user.username);
+        }
+        return 'favorites';
+    }
+
+    function toggleFavorite(id) {
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            showToastDesign('Vui lòng đăng nhập để lưu yêu thích', '⚠️');
+            setTimeout(() => window.location.href = 'login.html', 1000);
+            return;
+        }
+        const favs = JSON.parse(localStorage.getItem(getFavKey()) || '[]');
+        const idx = favs.indexOf(String(id));
+        if (idx > -1) {
+            favs.splice(idx, 1);
+            localStorage.setItem(getFavKey(), JSON.stringify(favs));
+            showToastDesign('Đã xóa khỏi Yêu thích', '🗑️');
+        } else {
+            favs.push(String(id));
+            localStorage.setItem(getFavKey(), JSON.stringify(favs));
+            showToastDesign('Đã thêm vào Yêu thích ❤️');
+        }
+    }
+
+    function showToastDesign(message, iconStr = '') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        // Black & White clean design 
+        toast.className = `transform translate-x-10 opacity-0 smooth-transition px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 font-bold text-sm text-slate-800 bg-white border border-slate-100 pointer-events-auto`;
+        toast.innerHTML = `${iconStr ? `<span class="text-xl">${iconStr}</span>` : ''} <span>${message}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.remove('translate-x-10', 'opacity-0'), 10);
+        setTimeout(() => { toast.classList.add('translate-x-10', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 2500);
+    }
+</script>
+</body>
+</html>

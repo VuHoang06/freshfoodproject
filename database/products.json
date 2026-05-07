@@ -1,0 +1,8 @@
+[
+    { "name": "Cải Chíp Hữu Cơ Thủy Canh", "category": "rau", "price": 35000, "unit": "500g", "image": "https://images.unsplash.com/photo-1557844352-761f2565b576?w=500&q=80", "sale": false, "bestseller": true },
+    { "name": "Thịt Lợn Sinh Học", "category": "thit", "price": 120000, "oldPrice": 135000, "unit": "1kg", "image": "https://images.unsplash.com/photo-1607623814075-e51df1bd6372?w=500&q=80", "sale": true, "bestseller": true },
+    { "name": "Cà Chua Cherry Organic", "category": "rau", "price": 45000, "unit": "500g", "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=500&q=80", "sale": false, "bestseller": false },
+    { "name": "Cá Hồi Na Uy Phi Lê", "category": "thit", "price": 350000, "unit": "500g", "image": "https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?w=500&q=80", "sale": false, "bestseller": true },
+    { "name": "Bông Cải Xanh Baby", "category": "rau", "price": 38000, "oldPrice": 45000, "unit": "500g", "image": "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=500&q=80", "sale": true, "bestseller": false },
+    { "name": "Táo Envy Size Lớn", "category": "traicay", "price": 210000, "unit": "1kg", "image": "https://images.unsplash.com/photo-1560806887-1e4cd0b6fac6?w=500&q=80", "sale": false, "bestseller": true }
+]
