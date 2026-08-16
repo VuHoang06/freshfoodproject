@@ -11,3 +11,5 @@ router.put('/:id', protect, adminOrStaff, updatePromotion);
 router.delete('/:id', protect, adminOrStaff, deletePromotion);
 
 module.exports = router;
+
+// baitaplon

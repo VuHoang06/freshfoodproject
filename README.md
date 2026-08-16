@@ -58,3 +58,5 @@ node database/exportDB.js
 Chạy Server: Tại thư mục backend, gõ npm start.
 Chạy Frontend: Mở file frontend/index.html bằng công cụ Live Server trên VS Code
 
+
+<!-- baitaplon -->

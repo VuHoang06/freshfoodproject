@@ -425,3 +425,5 @@ Auth.init = function () {
 };
 // Auto-init on every page
 document.addEventListener("DOMContentLoaded", () => Auth.init());
+
+// baitaplon

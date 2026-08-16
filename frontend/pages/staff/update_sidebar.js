@@ -28,3 +28,5 @@ fs.readdirSync(__dirname).forEach(file => {
 });
 
 console.log('Replaced all sidebars successfully!');
+
+// baitaplon

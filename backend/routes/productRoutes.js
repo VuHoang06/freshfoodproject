@@ -14,3 +14,5 @@ router.delete('/:id', protect, adminOrStaff, deleteProduct);
 router.post('/seed', protect, adminOrStaff, seedProducts);
 
 module.exports = router;
+
+// baitaplon

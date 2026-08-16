@@ -13,3 +13,5 @@ const promotionSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model('Promotion', promotionSchema);
+
+// baitaplon

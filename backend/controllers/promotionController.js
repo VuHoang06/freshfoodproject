@@ -244,3 +244,5 @@ const deletePromotion = async (req, res) => {
 };
 
 module.exports = { getPromotions, createPromotion, applyPromotion, updatePromotion, deletePromotion };
+
+// baitaplon

@@ -90,3 +90,5 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = { getProducts, getProductById, createProduct, updateProduct, deleteProduct, seedProducts };
+
+// baitaplon
